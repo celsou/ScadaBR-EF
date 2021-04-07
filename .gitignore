@@ -1,0 +1,2 @@
+# Ignorar o SVN, já que estamos usando o Git
+.svn/
