@@ -130,7 +130,10 @@
     	
         if(user.id != <c:out value="<%= Common.NEW_ID %>"/>) {
         	 $set("usersProfilesList", user.userProfile);
+        	 show("deleteImg");
         	 //console.log("User profile: " + user.userProfile);
+        } else {
+			 hide("deleteImg");
         }
 
     	
@@ -236,9 +239,12 @@
     }
     
     function saveUserCB(response) {
+    	show("deleteImg");
         stopImageFader($("saveImg"));
-        if (response.hasMessages)
+        if (response.hasMessages) {
             showDwrMessages(response.messages, "genericMessages");
+            hide("deleteImg");
+        }
         else if (!adminUser)
             setUserMessage("<fmt:message key="users.dataSaved"/>");
         else {

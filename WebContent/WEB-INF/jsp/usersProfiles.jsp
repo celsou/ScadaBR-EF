@@ -141,8 +141,12 @@
     }
     
     function showUserProfileCB(userProfile) {
-        show($("deleteButton"));
-        show($("userProfileDetails"));
+        if (userProfile.id != -1)
+    		show("deleteButton");
+        else
+        	hide("deleteButton");
+        
+        show("userProfileDetails");
         $set("userProfileName", userProfile.name);
 
         if (dataSources != null){
@@ -211,7 +215,7 @@
 	        }
         }
 
-      //populate watchlist permissions paremeters
+      // Populate watchlist permissions parameters
         var wlPermis = new Array();
         var wlval;
         if (watchlists != null){
@@ -224,7 +228,7 @@
 	        }
         }
 
-        //populate view permissions paremeters
+        // Populate view permissions parameters
         var vwPermis = new Array();
         var vwval;
         if (views != null){
@@ -241,6 +245,7 @@
     }
     
     function saveUserProfileCB(response) {
+    	show("deleteButton");
 		stopImageFader($("saveButton"));
         if (response.hasMessages)
             showDwrMessages(response.messages, "genericMessages");

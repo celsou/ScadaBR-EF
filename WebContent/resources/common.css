@@ -194,7 +194,7 @@ a.rowHeaderLink, a.rowHeaderLink:visited, a.rowHeaderLink:link, a.rowHeaderLink:
 	color: #FF0000;
 	padding-left: 10px;
 }
-select, input, textarea {
+select, input, textarea, button {
 	color: #333333;
 	/*border: 1px solid #F07800;*/
 	border: 1px solid #39B54A;
@@ -217,11 +217,16 @@ input[type="checkbox"], input[type="radio"] {
 .formDisabled {
 	border: 1px solid #D0D0D0;
 }
-input[type="submit"], input[type="button"] {
+input[type="submit"], input[type="button"], button {
+	background-color: #E8E8E7;
 	overflow: visible;
 }
-
-
+input[type="submit"]:hover, input[type="button"]:hover, button:hover {
+	background-color: #F0F0EF;
+}
+input[type="submit"]:active, input[type="button"]:active, button:active {
+	background-color: #E8E8E7;
+}
 
 /**
  * View styles
@@ -387,6 +392,9 @@ span.absmiddle img {
 /**
  * Documentation float pane style overrides.
  */
+html > body .dojoFloatingPaneTitleText {
+    color: #FFFFFF;
+}
 html > body .dojoFloatingPaneTitleBar {
     background-color: #424041;
 }

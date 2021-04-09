@@ -137,7 +137,8 @@
 		document.getElementById('mainHeader').style.display = "none";
   	  	document.getElementById('subHeader').style.display = "none";
   	  	document.getElementById('graphical').style.display = "none";
-  	  	jQuery('#fsOut').fadeOut(10000, function(){});
+  	  	//jQuery('#fsOut').fadeOut(10000, function(){});
+  	  	dojo.lfx.html.fadeHide($(fsOut), 10000).play(); // We don't need jQuery to do a simple fade out
   	  	
 	}
 	
@@ -147,7 +148,8 @@
 		document.getElementById('mainHeader').style.display = "none";
   	  	document.getElementById('subHeader').style.display = "none";
   	  	document.getElementById('graphical').style.display = "none";
-		jQuery('#fsOut').fadeOut(10000, function(){});
+		//jQuery('#fsOut').fadeOut(10000, function(){}); 
+		dojo.lfx.html.fadeHide($(fsOut), 10000).play(); // We don't need jQuery to do a simple fade out
 
   	  	setCookie("fullScreen","yes");
   	  	
@@ -167,6 +169,8 @@
 			if(check=="no"){
 				document.getElementById('fsOut').style.display = "none";
 			}
+		} else {
+			document.getElementById('fsOut').style.display = "none";
 		}
   	  	
 	}

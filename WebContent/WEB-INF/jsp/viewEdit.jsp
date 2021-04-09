@@ -168,7 +168,7 @@
         // Position and display the renderer editor.
         var pDim = getNodeBounds($("c"+ compId));
         var editDiv = $(editorId);
-        editDiv.style.left = (pDim.x + pDim.w + 20) +"px";
+        editDiv.style.left = (pDim.x + 20) +"px";
         editDiv.style.top = (pDim.y + 10) +"px";
     }
     

@@ -48,7 +48,7 @@
   <table cellspacing="0" cellpadding="0" border="0">
     <tr>
       <td>
-        <form action="login.htm" method="post" onclick="nag()">
+        <form action="login.htm" method="post">
           <table>
             <spring:bind path="login.username">
               <tr>

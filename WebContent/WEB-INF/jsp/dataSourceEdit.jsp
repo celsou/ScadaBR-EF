@@ -203,9 +203,16 @@
         $set("name", currentPoint.name);
         $set("xid", currentPoint.xid);
         var cancel;
-        if (typeof editPointCBImpl == 'function') cancel = editPointCBImpl(locator);
+        if (typeof editPointCBImpl == 'function')
+        	cancel = editPointCBImpl(locator);
         if (!cancel) {
             startImageFader("editImg"+ point.id);
+            // Improvement based on diegofontana's code suggestion at ScadaBR forum
+            var foo = $("editImg" + currentPoint.id).getBoundingClientRect().top;
+            var bar = $("pointProperties").getBoundingClientRect().top;
+            $("pointDetails").style.position = "relative";
+            $("pointDetails").style.backgroundColor = "#FFFFFF";
+            $("pointDetails").style.top = (foo - bar) + "px";
             show("pointDetails");
         }
     }

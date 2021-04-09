@@ -115,6 +115,7 @@ function helpImpl(documentId) {
 if (typeof(soundManager) != "undefined") {
     soundManager.debugMode = false;
     soundManager.onloadFinished = false;
+    soundManager.url = "/" + window.location.pathname.match(/[^/]\w*[^/]/) + "/";
     soundManager.onload = function() {
         soundManager.createSound({ id:'level1', url:'audio/information.mp3' });
         soundManager.createSound({ id:'level2', url:'audio/urgent.mp3' });
