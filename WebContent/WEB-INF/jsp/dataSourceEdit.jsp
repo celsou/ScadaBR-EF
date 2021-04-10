@@ -243,8 +243,9 @@
             showDwrMessages(response.messages);
         else {
             writePointList(response.data.points);
-            editPoint(response.data.id);
+            //editPoint(response.data.id);
             showMessage("pointMessage", "<fmt:message key="dsEdit.pointSaved"/>");
+            hide("pointDetails");
         }
     }
     
