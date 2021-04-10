@@ -60,6 +60,16 @@ mango.view.setData = function(stateArr) {
 mango.view.setMessages = function(state) {
     var warningNode = $("c"+ state.id +"Warning");
     if (warningNode && state.messages != null) {
+		// Change icon according to alarm level
+		document.querySelector("#c" + state.id + "Warning > img").src = "images/warn.png";
+		var levels = ["red", "orange", "yellow", "blue", "red_off", "orange_off", "yellow_off", "blue_off"];
+		for (var i in levels) {
+			if (state.messages.search("flag_" + levels[i] + ".png") > 0) {
+				document.querySelector("#c" + state.id + "Warning > img").src = "images/flag_" + levels[i] + ".png";
+				break;
+			}
+		}
+		// Set alarm messages to view component
         $set("c"+ state.id +"Messages", state.messages);
         if (state.messages)
             show(warningNode);

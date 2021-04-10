@@ -20,11 +20,8 @@
 <tag:page dwr="ViewDwr" js="view">
 	<script type="text/javascript" src="resources/wz_jsgraphics.js"></script>
 	<script type="text/javascript" src="resources/shortcut.js"></script>
-	<script type="text/javascript" src="resources/jquery.js"></script>
 	
 	<script type="text/javascript">
-	
-	jQuery.noConflict();
 	
 	shortcut.add("Ctrl+Shift+F",function() {
 
@@ -137,8 +134,7 @@
 		document.getElementById('mainHeader').style.display = "none";
   	  	document.getElementById('subHeader').style.display = "none";
   	  	document.getElementById('graphical').style.display = "none";
-  	  	//jQuery('#fsOut').fadeOut(10000, function(){});
-  	  	dojo.lfx.html.fadeHide($(fsOut), 10000).play(); // We don't need jQuery to do a simple fade out
+  	  	dojo.lfx.html.fadeHide($(fsOut), 10000).play(); // Fade out
   	  	
 	}
 	
@@ -148,8 +144,7 @@
 		document.getElementById('mainHeader').style.display = "none";
   	  	document.getElementById('subHeader').style.display = "none";
   	  	document.getElementById('graphical').style.display = "none";
-		//jQuery('#fsOut').fadeOut(10000, function(){}); 
-		dojo.lfx.html.fadeHide($(fsOut), 10000).play(); // We don't need jQuery to do a simple fade out
+		dojo.lfx.html.fadeHide($(fsOut), 10000).play(); // Fade out
 
   	  	setCookie("fullScreen","yes");
   	  	
@@ -163,7 +158,6 @@
 			
 			if(check=="yes"){
 				toggleDisplay();
-// 				document.getElementById('fsOut').style.display = "block";
 			}
 			
 			if(check=="no"){

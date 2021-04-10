@@ -83,20 +83,3 @@
     </div>
   </c:when>
 </c:choose>
-<script type="text/javascript">
-	window.setTimeout(function(){
-// 		console.log("#c${vc.id}Messages");
-		var msgs = jQuery("#c${vc.id}Messages");
-		if (msgs === undefined){
-// 			console.log("msgs is undefined");
-		} else {
-			var imgs = msgs.find('img');
-			if(imgs.length>0){
-// 				console.log("HTML: " + msgs.parent().html);
-// 				console.log("src: " + msgs.parent().children('img')[0].src);
-				msgs.parent().children('img')[0].src = imgs[0].src;
-			}
-		}
-	}, 1000);
-</script>
-

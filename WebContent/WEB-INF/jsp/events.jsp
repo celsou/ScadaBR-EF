@@ -22,29 +22,13 @@
 <%@page import="com.serotonin.mango.web.dwr.EventsDwr"%>
 <tag:page dwr="EventsDwr">
   <%@ include file="/WEB-INF/jsp/include/userComment.jsp" %>
-  <link rel="stylesheet" href="resources/jquery.ui.all.css">
-  <link rel="stylesheet" href="resources/demos.css">
-  <script type="text/javascript" src="resources/jquery.js"></script>
-  <script type="text/javascript" src="resources/jquery_ui.js"></script>
-  <script type="text/javascript" src="resources/jquery.ui.datepicker.js"></script>
-  <script type="text/javascript" src="resources/jquery.ui.datepicker-pt-BR.js"></script>
   <style>
     .incrementControl { width: 2em; }
   </style>
   <script type="text/javascript">
     // Tell the log poll that we're interested in monitoring pending alarms.
     mango.longPoll.pollRequest.pendingAlarms = true;
-//     dojo.requireLocalization("dojo.i18n.calendar", "gregorian", null, "de,en,es,fi,fr,ROOT,hu,it,ja,ko,nl,pt,pt-br,sv,zh,zh-cn,zh-hk,zh-tw");
-//     dojo.requireLocalization("dojo.i18n.calendar", "gregorianExtras", null, "ROOT,ja,zh");
-  
-  	jQuery.noConflict();
-  	
-  	jQuery.datepicker.setDefaults(jQuery.datepicker.regional['pt-BR']);
-  	
-  	jQuery(function() {
-		jQuery('#datePicker').datepicker();
-	});
-  	
+    
     function updatePendingAlarmsContent(content) {
         hide("hourglass");
         
@@ -131,10 +115,6 @@
     }
 
 //     dojo.addOnLoad(function() {
-//         var x = dojo.widget.byId("datePicker");
-//         x.hide();
-//         x.setDate(x.today);
-//         dojo.event.connect(x,'onValueChanged','jumpToDateClicked');
 //     });
   </script>
   
@@ -200,14 +180,6 @@
           <td class="formField"><input id="keywords" type="text"/></td>
         </tr>
         
-<!--         <tr> -->
-<!--         	<td> -->
-<!--         		<div id="datePickerDiv" style="position:relative; top:0px; left:0px;" onmouseover="cancelDatePickerExpiry()" onmouseout="expireDatePicker()"> -->
-<%--   				  <div widgetId="datePicker" dojoType="datepicker" dayWidth="narrow" lang="${lang}"></div> --%>
-<!--   				</div> -->
-<!--         	</td> -->
-<!--         </tr> -->
-
 		<tr>
           <td class="formLabel"><fmt:message key="events.search.maxResults"/></td>
           <td class="formField"><input id="maxResults" type="text"/></td>
@@ -227,9 +199,5 @@
     </div>
     <div id="searchResults"></div>
   </div>
-  
-<!--   <div id="datePickerDiv" style="position:relative; top:0px; left:0px;" onmouseover="cancelDatePickerExpiry()" onmouseout="expireDatePicker()"> -->
-<%--     <div widgetId="datePicker" dojoType="datepicker" dayWidth="narrow" lang="${lang}"></div> --%>
-<!--   </div> -->
   
 </tag:page>
