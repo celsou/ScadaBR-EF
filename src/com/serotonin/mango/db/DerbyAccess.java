@@ -127,7 +127,7 @@ public class DerbyAccess extends DatabaseAccess {
 			// instance.
 			// Create the tables
 			try {
-				FileOutputStream out = new FileOutputStream("createTables.log");
+				FileOutputStream out = new FileOutputStream("logs/createTables.log");
 				Connection conn = DataSourceUtils.getConnection(dataSource);
 				org.apache.derby.tools.ij.runScript(conn, ctx.getResourceAsStream("/WEB-INF/db/createTables-derby.sql"),
 						"ASCII", out, Common.UTF8);
