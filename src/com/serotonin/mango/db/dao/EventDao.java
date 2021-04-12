@@ -485,10 +485,14 @@ public class EventDao extends BaseDao {
 	public List<EventInstance> search(int eventId, int eventSourceType, String status, int alarmLevel,
 			final String[] keywords, int userId, final ResourceBundle bundle, final int from, final int to,
 			final Date date) {
-		return search(eventId, eventSourceType, status, alarmLevel, keywords, -1, -1, userId, bundle, from, to, date);
+		int[] convertAlarmLevel = new int[] { alarmLevel };
+		String[] convertStatus = new String[] { status };
+		int[] convertEventSourceType = new int[] { eventSourceType };
+		return search(eventId, convertEventSourceType, convertStatus, convertAlarmLevel, keywords, -1, -1, userId,
+				bundle, from, to, date);
 	}
 
-	public List<EventInstance> search(int eventId, int eventSourceType, String status, int alarmLevel,
+	public List<EventInstance> search(int eventId, int[] eventSourceType, String status[], int[] alarmLevel,
 			final String[] keywords, long dateFrom, long dateTo, int userId, final ResourceBundle bundle,
 			final int from, final int to, final Date date) {
 		List<String> where = new ArrayList<String>();
@@ -504,25 +508,58 @@ public class EventDao extends BaseDao {
 			params.add(eventId);
 		}
 
-		if (eventSourceType != -1) {
-			where.add("e.typeId=?");
-			params.add(eventSourceType);
+		// Enable multiple event sources search
+		if (eventSourceType.length > 0) {
+			String str = "";
+
+			for (int i = 0; i < eventSourceType.length; i++) {
+				if (i == 0)
+					str += "e.typeId in (?";
+				else
+					str += ",?";
+				params.add(eventSourceType[i]);
+			}
+			str += ")";
+			where.add(str);
 		}
 
-		if (EventsDwr.STATUS_ACTIVE.equals(status)) {
-			where.add("e.rtnApplicable=? and e.rtnTs is null");
-			params.add(boolToChar(true));
-		} else if (EventsDwr.STATUS_RTN.equals(status)) {
-			where.add("e.rtnApplicable=? and e.rtnTs is not null");
-			params.add(boolToChar(true));
-		} else if (EventsDwr.STATUS_NORTN.equals(status)) {
-			where.add("e.rtnApplicable=?");
-			params.add(boolToChar(false));
+		// Enable multiple status search
+		if (status.length > 0) {
+			String str = "(";
+
+			for (int i = 0; i < status.length; i++) {
+				if (EventsDwr.STATUS_ACTIVE.equals(status[i])) {
+					str += "(e.rtnApplicable=? and e.rtnTs is null)";
+					params.add(boolToChar(true));
+				} else if (EventsDwr.STATUS_RTN.equals(status[i])) {
+					str += "(e.rtnApplicable=? and e.rtnTs is not null)";
+					params.add(boolToChar(true));
+				} else if (EventsDwr.STATUS_NORTN.equals(status[i])) {
+					str += "(e.rtnApplicable=?)";
+					params.add(boolToChar(false));
+				}
+				if (i != (status.length - 1)) {
+					str += " or ";
+				}
+			}
+
+			str += ")";
+			where.add(str);
 		}
 
-		if (alarmLevel != -1) {
-			where.add("e.alarmLevel=?");
-			params.add(alarmLevel);
+		// Enable multiple alarms search
+		if (alarmLevel.length > 0) {
+			String str = "";
+
+			for (int i = 0; i < alarmLevel.length; i++) {
+				if (i == 0)
+					str += "e.alarmLevel in (?";
+				else
+					str += ",?";
+				params.add(alarmLevel[i]);
+			}
+			str += ")";
+			where.add(str);
 		}
 
 		if (dateFrom != -1) {
@@ -552,7 +589,7 @@ public class EventDao extends BaseDao {
 			@Override
 			public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
 				int row = 0;
-				long dateTs = date == null ? -1 : date.getTime();
+				long dateTs = date.getTime() == 0 ? -1 : date.getTime();
 				int startRow = -1;
 
 				while (rs.next()) {
@@ -586,14 +623,17 @@ public class EventDao extends BaseDao {
 					}
 
 					if (add) {
-						if (date != null) {
+						if (date.getTime() != 0) {
 							if (e.getActiveTimestamp() <= dateTs && results.size() < to - from) {
 								if (startRow == -1)
 									startRow = row;
 								results.add(e);
 							}
-						} else if (row >= from && row < to)
+						} else if (row >= from && row < to) {
+							if (startRow == -1)
+								startRow = row;
 							results.add(e);
+						}
 
 						row++;
 					}
@@ -658,9 +698,9 @@ public class EventDao extends BaseDao {
 	}
 
 	/**
-	 * Note: eventHandlers.eventTypeRef2 matches on both the given ref2 and 0.
-	 * This is to allow a single set of event handlers to be defined for user
-	 * login events, rather than have to individually define them for each user.
+	 * Note: eventHandlers.eventTypeRef2 matches on both the given ref2 and 0. This
+	 * is to allow a single set of event handlers to be defined for user login
+	 * events, rather than have to individually define them for each user.
 	 */
 	private List<EventHandlerVO> getEventHandlers(int typeId, int ref1, int ref2) {
 		return query(

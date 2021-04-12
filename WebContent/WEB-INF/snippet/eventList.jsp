@@ -18,39 +18,43 @@
 --%><%@ include file="/WEB-INF/jsp/include/tech.jsp" %>
 <c:if test="${!empty events || !noContentWhenEmpty}">
   <c:if test="${displayPagination}">
-    <div style="padding:3px; float:left;">
-      <c:choose>
-        <c:when test="${page == 0}">1</c:when>
-        <c:otherwise><a href="#" onclick="doSearch(0);return false;">1</a></c:otherwise>
-      </c:choose>
-      <c:if test="${leftEllipsis}">...</c:if>
-      <c:forEach begin="${linkFrom}" end="${linkTo}" var="i">
+    <div class="paginationContainer">
+      <div style="padding:3px;">
         <c:choose>
-          <c:when test="${i-1 == page}">${i}</c:when>
-          <c:otherwise><a href="#" onclick="doSearch(${i-1});return false;">${i}</a></c:otherwise>
+          <c:when test="${page == 0}">1</c:when>
+          <c:otherwise><a href="#" onclick="doSearch(0);return false;">1</a></c:otherwise>
         </c:choose>
-      </c:forEach>
-      <c:if test="${rightEllipsis}">...</c:if>
-      <c:choose>
-        <c:when test="${page == numberOfPages-1}">${numberOfPages}</c:when>
-        <c:otherwise><a href="#" onclick="doSearch(${numberOfPages-1});return false;">${numberOfPages}</a></c:otherwise>
-      </c:choose>
+        <c:if test="${leftEllipsis}">...</c:if>
+        <c:forEach begin="${linkFrom}" end="${linkTo}" var="i">
+          <c:choose>
+            <c:when test="${i-1 == page}">${i}</c:when>
+            <c:otherwise><a href="#" onclick="doSearch(${i-1}, 0);">${i}</a></c:otherwise>
+          </c:choose>
+        </c:forEach>
+        <c:if test="${rightEllipsis}">...</c:if>
+        <c:choose>
+          <c:when test="${page == numberOfPages-1}">${numberOfPages}</c:when>
+          <c:otherwise><a href="#" onclick="doSearch(${numberOfPages-1}, 0);">${numberOfPages}</a></c:otherwise>
+        </c:choose>
       
-      <c:choose>
-        <c:when test="${page <= 0}">&lt;</c:when>
-        <c:otherwise><a href="#" onclick="doSearch(${page-1});return false;">&lt;</a></c:otherwise>
-      </c:choose>
-      <c:choose>
-        <c:when test="${page + 1 >= numberOfPages}">&gt;</c:when>
-        <c:otherwise><a href="#" onclick="doSearch(${page+1});return false;">&gt;</a></c:otherwise>
-      </c:choose>
-    </div>
-  </c:if>
-  <c:if test="${!empty events && !pendingEvents}">
-    <div style="padding:3px; float:left;">
-      <c:if test="${displayPagination}">|</c:if>
-      <a href="#" onclick="jumpToDate(this);return false;"><fmt:message key="events.jumpToDate"/></a>
-      | <fmt:message key="events.listed"><fmt:param value="${fn:length(events)}"/></fmt:message>
+        <c:choose>
+          <c:when test="${page <= 0}">&lt;</c:when>
+          <c:otherwise><a href="#" onclick="doSearch(${page-1}, 0);">&lt;</a></c:otherwise>
+        </c:choose>
+        <c:choose>
+          <c:when test="${page + 1 >= numberOfPages}">&gt;</c:when>
+          <c:otherwise><a href="#" onclick="doSearch(${page+1}, 0);">&gt;</a></c:otherwise>
+        </c:choose>
+        <c:if test="${!empty events && !pendingEvents}">
+          | <fmt:message key="events.listed"><fmt:param value="${fn:length(events)}"/></fmt:message>
+        </c:if>
+      </div>
+      <c:if test="${!empty events && !pendingEvents}">
+        <div style="padding:3px;">
+          <fmt:message key="events.jumpToDate"/>: <input id="jumpToDate" onchange="jumpToDate(this.value);">
+          <script>flatpickr("#jumpToDate");</script>
+        </div>
+      </c:if>
     </div>
   </c:if>
   <div style="clear:both;"></div>
