@@ -33,6 +33,7 @@
   <script src="resources/flatpickr/l10ns/allLocales.min.js"></script>
   
   <style>
+     html {scroll-behavior: smooth;}
     .section {width: 99%; transition: 0.25s ease-in-out; overflow: hidden; padding: 5px;}
     .section > * {transition: 0.25s ease-in-out;}
     .titlePadding {padding: 3px !important;}
@@ -40,14 +41,13 @@
     
     #pendingAlarms table {width: 100%; border:2px solid transparent}
     #searchResults table {width: 100%; border:2px solid transparent;}
-    #searchResults .paginationContainer {text-align: center;}
     
     #searchForm {width: 70%; table-layout: fixed; margin: 20px auto; padding: 5px;}
     #searchForm input[type="text"], input[type="number"] {width: 100%; box-sizing: border-box;}
     #searchForm td {padding: 5px; vertical-align: top;}
     #searchForm td span {display: block;}
     
-    #searchBtn { width: 90px; height: 35px; font-size: 12px; display: block; margin: auto;}
+    #searchBtn {width: 90px; height: 35px; font-size: 12px; display: block; margin: auto;}
   </style>
   
   <script type="text/javascript">
@@ -89,18 +89,12 @@
 		searchOptions.alarmLevels = arrayFromCheckboxes($("alarmLevel"));
 		searchOptions.eventSourceTypes = arrayFromCheckboxes($("eventSourceType"));
 	}
-		
-	function jumpToDate(date) {
-        var unixTime = date.getTime();
-        doSearch(0, unixTime, false);
-    }
 	
-	function doSearch(page, date, update) {
-        if (update)
-        	updateSearchOptions();
-        
+	function doSearch(page, date) {
+       	updateSearchOptions();
 		setDisabled("searchBtn", true);
-        $set("searchMessage", "<fmt:message key="events.search.searching"/>");
+        $set("searchMessage", " - <fmt:message key="events.search.searching"/>");
+        
         EventsDwr.search(searchOptions.eventId, searchOptions.eventSourceTypes, searchOptions.eventStatus, 
 						 searchOptions.alarmLevels,  searchOptions.keywords, /*dateRangeType*/ 3, /*relativeDateType*/ 0,
 						 /*previousPeriodCount*/ 0, /*previousPeriodType*/ 0, /*pastPeriodCount*/ 0, /*pastPeriodType*/ 0,
@@ -116,7 +110,7 @@
 						 searchOptions.endDate.getDate(), searchOptions.endDate.getHours(),
 						 searchOptions.endDate.getMinutes(), searchOptions.endDate.getSeconds(),
 						 /* Other options */
-						 page, date, updateSearchResults);
+						 page, 0, updateSearchResults);
     }
 	
 	function updateSearchResults(results) {
@@ -124,6 +118,18 @@
         setDisabled("searchBtn", false);
         $set("searchMessage", " - " + results.data.resultCount);
         toggleDisplay("search", true);
+        window.setTimeout(scrollToResults, 100);
+	}
+	
+	function scrollToResults() {
+		// Scroll screen to the search results
+        if (window.pageYOffset !== undefined) {
+			var windowY = window.pageYOffset;
+			var tableY = $("searchResults").getBoundingClientRect().top;
+			window.scroll(0, (windowY + tableY));
+		} else {
+			window.scroll(0, 0);
+		}
 	}
 	
 	function arrayFromCheckboxes(element) {
@@ -178,8 +184,12 @@
          if (flatpickr.l10ns[locale])
 			flatpickr.localize(flatpickr.l10ns[locale]);
          flatpickr("#startDate", { enableTime: true, altInput: true, defaultDate: new Date(Date.now() - 86400000) });
-         flatpickr("#endDate", { enableTime: true, altInput: true, defaultDate: Date.now() });         
+         flatpickr("#endDate", { enableTime: true, altInput: true, defaultDate: Date.now() });
+         
+         disableCalendarInput($("enableStartDate"));
+         disableCalendarInput($("enableEndDate"));
      });
+     
   </script>
   
   <!-- Pending alarms section -->

@@ -485,14 +485,25 @@ public class EventDao extends BaseDao {
 	public List<EventInstance> search(int eventId, int eventSourceType, String status, int alarmLevel,
 			final String[] keywords, int userId, final ResourceBundle bundle, final int from, final int to,
 			final Date date) {
-		int[] convertAlarmLevel = new int[] { alarmLevel };
-		String[] convertStatus = new String[] { status };
-		int[] convertEventSourceType = new int[] { eventSourceType };
-		return search(eventId, convertEventSourceType, convertStatus, convertAlarmLevel, keywords, -1, -1, userId,
-				bundle, from, to, date);
+
+		return search(eventId, eventSourceType, status, alarmLevel, keywords, -1, -1, userId, bundle, from, to, date);
 	}
 
-	public List<EventInstance> search(int eventId, int[] eventSourceType, String status[], int[] alarmLevel,
+	public List<EventInstance> search(int eventId, int eventSourceType, String status, int alarmLevel,
+			final String[] keywords, long dateFrom, long dateTo, int userId, final ResourceBundle bundle,
+			final int from, final int to, final Date date) {
+		// Convert variables to be compatible with new multiple search features
+		int[] convertAlarmLevel = alarmLevel != -1 ? new int[] { alarmLevel } : new int[0];
+		String[] convertStatus = new String[] { status };
+		int[] convertEventSourceType = eventSourceType != -1 ? new int[] { eventSourceType } : new int[0];
+		Date convertDate = new Date();
+		convertDate.setTime(0);
+		convertDate = date != null ? date : convertDate;
+		return search(eventId, convertEventSourceType, convertStatus, convertAlarmLevel, keywords, dateFrom, dateTo,
+				userId, bundle, from, to, convertDate);
+	}
+
+	public List<EventInstance> search(int eventId, int[] eventSourceType, String[] status, int[] alarmLevel,
 			final String[] keywords, long dateFrom, long dateTo, int userId, final ResourceBundle bundle,
 			final int from, final int to, final Date date) {
 		List<String> where = new ArrayList<String>();
