@@ -354,7 +354,11 @@
     <relation id="cronPatterns"/>
     <relation id="eventDetectors"/>
   </item>
-  
+
+  <item id="pendingAlarms"/>
+
+  <item id="eventsSearch"/>
+
   <item id="scriptDSObject">
   </item>
   

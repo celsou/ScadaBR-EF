@@ -323,6 +323,7 @@
             <tr>
               <td>
                 <span class="smallTitle"><fmt:message key="userProfiles.title"/></span>
+                <tag:help id="usersProfiles"/>
               </td>
               <td align="right"><tag:img png="user_add" onclick="showUserProfile(${applicationScope['constants.Common.NEW_ID']})"
                       title="userProfiles.add" id="u${applicationScope['constants.Common.NEW_ID']}Img"/></td>
