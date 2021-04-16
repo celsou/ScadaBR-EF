@@ -57,12 +57,11 @@ public class EventsDwr extends BaseDwr {
 	public static final int RELATIVE_DATE_TYPE_PREVIOUS = 1;
 	public static final int RELATIVE_DATE_TYPE_PAST = 2;
 
-	public DwrResponseI18n searchOld(int eventId, int eventSourceType,
-			String status, int alarmLevel, String keywordStr, int maxResults) {
+	public DwrResponseI18n searchOld(int eventId, int eventSourceType, String status, int alarmLevel, String keywordStr,
+			int maxResults) {
 
 		DwrResponseI18n response = new DwrResponseI18n();
-		HttpServletRequest request = WebContextFactory.get()
-				.getHttpServletRequest();
+		HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();
 		User user = Common.getUser(request);
 
 		String[] keywordArr = keywordStr.split("\\s+");
@@ -79,71 +78,61 @@ public class EventsDwr extends BaseDwr {
 			keywords.toArray(keywordArr);
 		}
 
-		List<EventInstance> results = new EventDao().searchOld(eventId,
-				eventSourceType, status, alarmLevel, keywordArr, maxResults,
-				user.getId(), getResourceBundle());
+		List<EventInstance> results = new EventDao().searchOld(eventId, eventSourceType, status, alarmLevel, keywordArr,
+				maxResults, user.getId(), getResourceBundle());
 
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("events", results);
 		model.put("showControls", false);
 
-		response.addData("content",
-				generateContent(request, "eventList.jsp", model));
-		response.addData("resultCount", new LocalizableMessage(
-				"events.search.resultCount", results.size()));
+		response.addData("content", generateContent(request, "eventList.jsp", model));
+		response.addData("resultCount", new LocalizableMessage("events.search.resultCount", results.size()));
 
 		return response;
 	}
 
 	@MethodFilter
-	public DwrResponseI18n search(int eventId, int eventSourceType,
-			String status, int alarmLevel, String keywordStr,
-			int dateRangeType, int relativeDateType, int previousPeriodCount,
-			int previousPeriodType, int pastPeriodCount, int pastPeriodType,
-			boolean fromNone, int fromYear, int fromMonth, int fromDay,
-			int fromHour, int fromMinute, int fromSecond, boolean toNone,
-			int toYear, int toMonth, int toDay, int toHour, int toMinute,
-			int toSecond, int page, Date date) {
+	public DwrResponseI18n search(int eventId, int[] eventSourceType, String[] status, int[] alarmLevel,
+			String keywordStr, int dateRangeType, int relativeDateType, int previousPeriodCount, int previousPeriodType,
+			int pastPeriodCount, int pastPeriodType, boolean fromNone, int fromYear, int fromMonth, int fromDay,
+			int fromHour, int fromMinute, int fromSecond, boolean toNone, int toYear, int toMonth, int toDay,
+			int toHour, int toMinute, int toSecond, int page, Date date) {
 
 		System.out.println("search INICIO");
 
 		DwrResponseI18n response = new DwrResponseI18n();
-		HttpServletRequest request = WebContextFactory.get()
-				.getHttpServletRequest();
+		HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();
 		User user = Common.getUser(request);
 
-		System.out.println("search Aqui 1");
+		// System.out.println("search Aqui 1");
 
 		int from = PAGE_SIZE * page;
 		int to = from + PAGE_SIZE;
 
-		System.out.println(date.toString());
+		// System.out.println(date.toString());
 
 		// This date is for the "jump to date" functionality. The date is set
-		// for the top of the day, which will end up
-		// excluding all of the events for that day. So, // we need to add 1 day
-		// to it.
-		if (date != null)
-			date = DateUtils.minus(new DateTime(date.getTime()),
-					Common.TimePeriods.DAYS, -1).toDate();
+		// for the top of the day, which will end up excluding all of the
+		// events for that day. So, we need to add 1 day to it.
+		// After some bugs using null, now the timestamp "0" is used to detect
+		// we don't want to call this functionality.
+		if (date.getTime() != 0)
+			date = DateUtils.minus(new DateTime(date.getTime()), Common.TimePeriods.DAYS, -1).toDate();
 
-		LongPair dateRange = getDateRange(dateRangeType, relativeDateType,
-				previousPeriodCount, previousPeriodType, pastPeriodCount,
-				pastPeriodType, fromNone, fromYear, fromMonth, fromDay,
-				fromHour, fromMinute, fromSecond, toNone, toYear, toMonth,
-				toDay, toHour, toMinute, toSecond);
+		LongPair dateRange = getDateRange(dateRangeType, relativeDateType, previousPeriodCount, previousPeriodType,
+				pastPeriodCount, pastPeriodType, fromNone, fromYear, fromMonth, fromDay, fromHour, fromMinute,
+				fromSecond, toNone, toYear, toMonth, toDay, toHour, toMinute, toSecond);
 
 		EventDao eventDao = new EventDao();
-		List<EventInstance> results = eventDao.search(eventId, eventSourceType,
-				status, alarmLevel, getKeywords(keywordStr), dateRange.getL1(),
-				dateRange.getL2(), user.getId(), getResourceBundle(), from, to,
-				date);
+		List<EventInstance> results = eventDao.search(eventId, eventSourceType, status, alarmLevel,
+				getKeywords(keywordStr), dateRange.getL1(), dateRange.getL2(), user.getId(), getResourceBundle(), from,
+				to, date);
 
 		Map<String, Object> model = new HashMap<String, Object>();
 		int searchRowCount = eventDao.getSearchRowCount();
 		int pages = (int) Math.ceil(((double) searchRowCount) / PAGE_SIZE);
 
-		if (date != null) {
+		if (date.getTime() != 0) {
 			int startRow = eventDao.getStartRow();
 			if (startRow == -1)
 				page = pages - 1;
@@ -181,33 +170,25 @@ public class EventsDwr extends BaseDwr {
 		model.put("page", page);
 		model.put("pendingEvents", false);
 
-		response.addData("content",
-				generateContent(request, "eventList.jsp", model));
-		response.addData("resultCount", new LocalizableMessage(
-				"events.search.resultCount", searchRowCount));
+		response.addData("content", generateContent(request, "eventList.jsp", model));
+		response.addData("resultCount", new LocalizableMessage("events.search.resultCount", searchRowCount));
 
 		return response;
 	}
 
 	@MethodFilter
-	public void exportEvents(int eventId, int eventSourceType, String status,
-			int alarmLevel, String keywordStr, int dateRangeType,
-			int relativeDateType, int previousPeriodCount,
-			int previousPeriodType, int pastPeriodCount, int pastPeriodType,
-			boolean fromNone, int fromYear, int fromMonth, int fromDay,
-			int fromHour, int fromMinute, int fromSecond, boolean toNone,
-			int toYear, int toMonth, int toDay, int toHour, int toMinute,
-			int toSecond) {
+	public void exportEvents(int eventId, int eventSourceType, String status, int alarmLevel, String keywordStr,
+			int dateRangeType, int relativeDateType, int previousPeriodCount, int previousPeriodType,
+			int pastPeriodCount, int pastPeriodType, boolean fromNone, int fromYear, int fromMonth, int fromDay,
+			int fromHour, int fromMinute, int fromSecond, boolean toNone, int toYear, int toMonth, int toDay,
+			int toHour, int toMinute, int toSecond) {
 		User user = Common.getUser();
-		LongPair dateRange = getDateRange(dateRangeType, relativeDateType,
-				previousPeriodCount, previousPeriodType, pastPeriodCount,
-				pastPeriodType, fromNone, fromYear, fromMonth, fromDay,
-				fromHour, fromMinute, fromSecond, toNone, toYear, toMonth,
-				toDay, toHour, toMinute, toSecond);
+		LongPair dateRange = getDateRange(dateRangeType, relativeDateType, previousPeriodCount, previousPeriodType,
+				pastPeriodCount, pastPeriodType, fromNone, fromYear, fromMonth, fromDay, fromHour, fromMinute,
+				fromSecond, toNone, toYear, toMonth, toDay, toHour, toMinute, toSecond);
 
-		EventExportDefinition def = new EventExportDefinition(eventId,
-				eventSourceType, status, alarmLevel, getKeywords(keywordStr),
-				dateRange.getL1(), dateRange.getL2(), user.getId());
+		EventExportDefinition def = new EventExportDefinition(eventId, eventSourceType, status, alarmLevel,
+				getKeywords(keywordStr), dateRange.getL1(), dateRange.getL2(), user.getId());
 
 		Common.getUser().setEventExportDefinition(def);
 	}
@@ -230,21 +211,17 @@ public class EventsDwr extends BaseDwr {
 		return keywordArr;
 	}
 
-	private LongPair getDateRange(int dateRangeType, int relativeDateType,
-			int previousPeriodCount, int previousPeriodType,
-			int pastPeriodCount, int pastPeriodType, boolean fromNone,
-			int fromYear, int fromMonth, int fromDay, int fromHour,
-			int fromMinute, int fromSecond, boolean toNone, int toYear,
+	private LongPair getDateRange(int dateRangeType, int relativeDateType, int previousPeriodCount,
+			int previousPeriodType, int pastPeriodCount, int pastPeriodType, boolean fromNone, int fromYear,
+			int fromMonth, int fromDay, int fromHour, int fromMinute, int fromSecond, boolean toNone, int toYear,
 			int toMonth, int toDay, int toHour, int toMinute, int toSecond) {
 		LongPair range = new LongPair(-1, -1);
 
 		if (dateRangeType == DATE_RANGE_TYPE_RELATIVE) {
 			if (relativeDateType == RELATIVE_DATE_TYPE_PREVIOUS) {
-				DateTime dt = DateUtils.truncateDateTime(new DateTime(),
-						previousPeriodType);
+				DateTime dt = DateUtils.truncateDateTime(new DateTime(), previousPeriodType);
 				range.setL2(dt.getMillis());
-				dt = DateUtils.minus(dt, previousPeriodType,
-						previousPeriodCount);
+				dt = DateUtils.minus(dt, previousPeriodType, previousPeriodCount);
 				range.setL1(dt.getMillis());
 			} else {
 				DateTime dt = new DateTime();
@@ -254,14 +231,12 @@ public class EventsDwr extends BaseDwr {
 			}
 		} else if (dateRangeType == DATE_RANGE_TYPE_SPECIFIC) {
 			if (!fromNone) {
-				DateTime dt = new DateTime(fromYear, fromMonth, fromDay,
-						fromHour, fromMinute, fromSecond, 0);
+				DateTime dt = new DateTime(fromYear, fromMonth, fromDay, fromHour, fromMinute, fromSecond, 0);
 				range.setL1(dt.getMillis());
 			}
 
 			if (!toNone) {
-				DateTime dt = new DateTime(toYear, toMonth, toDay, toHour,
-						toMinute, toSecond, 0);
+				DateTime dt = new DateTime(toYear, toMonth, toDay, toHour, toMinute, toSecond, 0);
 				range.setL2(dt.getMillis());
 			}
 		}
