@@ -66,8 +66,18 @@
             hide("ackAllDiv");
             show("noAlarms");
         }
+        updateAlarmsCount();
     }
         
+    function updateAlarmsCount() {
+	    if (document.querySelector("#alarms #rowsCount")) {
+	    	rows = document.querySelector("#alarms #rowsCount").value;
+	    	$("alarmsCount").innerHTML = " - " + rows;
+	    } else {
+	    	$("alarmsCount").innerHTML = "";
+    	}
+    }
+    
     function silenceAll() {
     	MiscDwr.silenceAll(function(result) {
     		var silenced = result.data.silenced;
@@ -162,7 +172,7 @@
 		var titleElement = parent.querySelector(".smallTitle");
 		if (parent.style.maxHeight == "")
 			parent.style.maxHeight = parent.clientHeight + "px";
-		if (forceShow || parent.clientHeight <= 35) {
+		if (forceShow || parent.clientHeight <= 40) {
 			var newSize = element.clientHeight + parent.clientHeight;
 			parent.style.maxHeight = newSize + "px";
 			element.style.visibility = "";
@@ -197,6 +207,7 @@
     <div class="smallTitle titlePadding" style="float:left;">
       <tag:img png="flag_white" title="events.alarms"/>
       <fmt:message key="events.pending"/>
+      <span id="alarmsCount"></span>
       <tag:help id="pendingAlarms"/>
       <img src="images/icon_arrow_up.png" class="ptr" onclick="toggleArrowIcon(this); toggleDisplay('alarms');">
     </div>
@@ -237,14 +248,14 @@
 			</tr>
 			<tr>
 				<td>
-					<span class="bold"> <input id="enableStartDate" type="checkbox" checked="true" onchange="disableCalendarInput(this);"> Data inicial: </span>
+					<span class="bold"> <input id="enableStartDate" type="checkbox" checked="true" onchange="disableCalendarInput(this);"> <fmt:message key="events.search.startDate"/>: </span>
 					<input id="startDate" type="text" readonly="readonly">
-					<span class="disabledText formError" style="text-align:center;visibility:hidden;" >Desde o come&ccedil;o.</span>
+					<span class="disabledText formError" style="text-align:center;visibility:hidden;"><fmt:message key="events.search.fromBeginning"/></span>
 				</td>
 				<td>
-					<span class="bold"> <input id="enableEndDate" type="checkbox" checked="true" onchange="disableCalendarInput(this);"> Data final: </span>
+					<span class="bold"> <input id="enableEndDate" type="checkbox" checked="true" onchange="disableCalendarInput(this);"> <fmt:message key="events.search.endDate"/>: </span>
 					<input id="endDate" type="text" readonly="readonly">
-					<span class="disabledText formError" style="text-align:center;visibility:hidden;">At&eacute; o fim.</span>
+					<span class="disabledText formError" style="text-align:center;visibility:hidden;"><fmt:message key="events.search.toEnd"/></span>
 				</td>
 				<td>
 					<span class="bold"> <fmt:message key="events.id"/>: <input type="checkbox" style="width:0px;visibility:hidden;"> </span>

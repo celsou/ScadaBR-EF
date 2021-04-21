@@ -53,7 +53,7 @@
   
   <div style="clear:both;"></div>
   
-  <input id="rowCount" type="hidden" value="${fn:length(events)}">
+  <input id="rowsCount" type="hidden" value="${fn:length(events)}">
   <table cellspacing="1" cellpadding="0" border="0">
     <tr class="rowHeader">
       <td><fmt:message key="events.id"/></td>

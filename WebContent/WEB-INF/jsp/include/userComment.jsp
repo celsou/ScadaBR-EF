@@ -34,8 +34,13 @@
       commentTypeId = typeId;
       commentReferenceId = referenceId;
       $set("commentText", "");
+      $("CommentDialog").style.position = "fixed";
+      $("CommentDialog").style.top = "50%";
+      $("CommentDialog").style.left = "50%";
+      $("CommentDialog").style.transform = "translate(-50%, -50%)";
+      $("CommentDialog").style.msTransform = "translate(-50%, -50%)";
       dojo.widget.byId("CommentDialog").show();
-      $("commentText").focus();
+      setTimeout(function() { $("commentText").focus(); }, 100);
   }
   
   function saveComment() {

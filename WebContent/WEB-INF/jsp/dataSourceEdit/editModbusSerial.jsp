@@ -37,13 +37,13 @@
 <style>
 	#warningContainer { width: 100%; height: 100%; background-color: white; text-align: center; }
 	#warning { margin:20px auto; background-color: #FFC47D; color: #946225; border:2px solid #F69116;
-		   border-radius: 4px; width:  550px; overflow: visible; }
+		   border-radius: 6px; width:  550px; overflow: visible; }
 	#warning h1 { font-size: 60px; }
 	#warning p { font-size: 15px; margin: 3px 8px;  }
 	
 	.smallItalic { font-size: 11px !important; font-style: italic; }
-	a, a:visited, a:link, a:hover { font-size: 15px !important; color: #946225; cursor: pointer; }
-	a:hover { color: #D48C35; }
+	#back, #back:visited, #back:link, #back:hover { font-size: 15px !important; color: #946225; cursor: pointer; }
+	#back:hover { color: #D48C35; }
 	
 	td.footer, div[style*="padding:5px;"] { display:none !important;}
 </style>
@@ -61,7 +61,7 @@
 		<p class="smallItalic">Por favor, considere utilizar um conversor Modbus Serial/TCP ou migrar para o ScadaBR 1.0CE</p>
 		<p class="smallItalic">Pedimos desculpas pelo inconveniente</p>
 	</div>
-	<a href="data_sources.shtm">Back</a>
+	<a id="back" href="data_sources.shtm">Back</a>
 </div>
 <!-- End of warning -->
 
