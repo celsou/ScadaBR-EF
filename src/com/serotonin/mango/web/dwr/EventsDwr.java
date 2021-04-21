@@ -98,7 +98,7 @@ public class EventsDwr extends BaseDwr {
 			int fromHour, int fromMinute, int fromSecond, boolean toNone, int toYear, int toMonth, int toDay,
 			int toHour, int toMinute, int toSecond, int page, Date date) {
 
-		System.out.println("search INICIO");
+		// System.out.println("search INICIO");
 
 		DwrResponseI18n response = new DwrResponseI18n();
 		HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();

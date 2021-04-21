@@ -197,6 +197,7 @@
     <div class="smallTitle titlePadding" style="float:left;">
       <tag:img png="flag_white" title="events.alarms"/>
       <fmt:message key="events.pending"/>
+      <tag:help id="pendingAlarms"/>
       <img src="images/icon_arrow_up.png" class="ptr" onclick="toggleArrowIcon(this); toggleDisplay('alarms');">
     </div>
     <div id="alarms" style="clear:both;">
@@ -221,6 +222,7 @@
 		<tag:img png="magnifier" title="events.search"/>
 		<fmt:message key="events.search"/>
 		<span id="searchMessage"></span>
+		<tag:help id="eventsSearch"/>
 		<img src="images/icon_arrow_down.png" class="ptr" onclick="toggleArrowIcon(this); toggleDisplay('search');">
     </div>
     

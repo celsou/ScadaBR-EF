@@ -69,7 +69,13 @@
     <relation id="galilDS"/>
   </item>
   
-  <item id="userAdministration"/>
+  <item id="userAdministration">
+  	<relation id="usersProfiles"/>
+  </item>
+  
+  <item id="usersProfiles">
+  	<relation id="userAdministration"/>
+  </item>
 
   <item id="generalPublisherProperties"/>
   

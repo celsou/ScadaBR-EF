@@ -18,7 +18,7 @@
 --%><%@ include file="/WEB-INF/jsp/include/tech.jsp" %>
 <c:if test="${!empty events || !noContentWhenEmpty}">
   <c:if test="${displayPagination}">
-    <!-- Superior page navigation -->
+    <!-- Superior navigation links -->
     <div style="text-align: center; width: 100%;">
         <c:choose>
           <c:when test="${page == 0}">1</c:when>
@@ -53,6 +53,7 @@
   
   <div style="clear:both;"></div>
   
+  <input id="rowCount" type="hidden" value="${fn:length(events)}">
   <table cellspacing="1" cellpadding="0" border="0">
     <tr class="rowHeader">
       <td><fmt:message key="events.id"/></td>
@@ -174,7 +175,7 @@
   </table>
   
   <c:if test="${displayPagination}">
-  	<!-- Inferior page navigation -->
+  	<!-- Inferior navigation links -->
     <div style="text-align: center; width: 100%;">
         <c:choose>
           <c:when test="${page == 0}">1</c:when>

@@ -496,8 +496,7 @@ public class EventDao extends BaseDao {
 		int[] convertAlarmLevel = alarmLevel != -1 ? new int[] { alarmLevel } : new int[0];
 		String[] convertStatus = new String[] { status };
 		int[] convertEventSourceType = eventSourceType != -1 ? new int[] { eventSourceType } : new int[0];
-		Date convertDate = new Date();
-		convertDate.setTime(0);
+		Date convertDate = new Date(0);
 		convertDate = date != null ? date : convertDate;
 		return search(eventId, convertEventSourceType, convertStatus, convertAlarmLevel, keywords, dateFrom, dateTo,
 				userId, bundle, from, to, convertDate);
@@ -521,56 +520,57 @@ public class EventDao extends BaseDao {
 
 		// Enable multiple event sources search
 		if (eventSourceType.length > 0) {
-			String str = "";
+			StringBuilder str = new StringBuilder();
 
 			for (int i = 0; i < eventSourceType.length; i++) {
 				if (i == 0)
-					str += "e.typeId in (?";
+					str.append("e.typeId in (?");
 				else
-					str += ",?";
+					str.append(",?");
 				params.add(eventSourceType[i]);
 			}
-			str += ")";
-			where.add(str);
+
+			str.append(")");
+			where.add(str.toString());
 		}
 
 		// Enable multiple status search
 		if (status.length > 0) {
-			String str = "(";
+			StringBuilder str = new StringBuilder("(");
 
 			for (int i = 0; i < status.length; i++) {
 				if (EventsDwr.STATUS_ACTIVE.equals(status[i])) {
-					str += "(e.rtnApplicable=? and e.rtnTs is null)";
+					str.append("(e.rtnApplicable=? and e.rtnTs is null)");
 					params.add(boolToChar(true));
 				} else if (EventsDwr.STATUS_RTN.equals(status[i])) {
-					str += "(e.rtnApplicable=? and e.rtnTs is not null)";
+					str.append("(e.rtnApplicable=? and e.rtnTs is not null)");
 					params.add(boolToChar(true));
 				} else if (EventsDwr.STATUS_NORTN.equals(status[i])) {
-					str += "(e.rtnApplicable=?)";
+					str.append("(e.rtnApplicable=?)");
 					params.add(boolToChar(false));
 				}
-				if (i != (status.length - 1)) {
-					str += " or ";
-				}
+
+				if (i != (status.length - 1))
+					str.append(" or ");
 			}
 
-			str += ")";
-			where.add(str);
+			str.append(")");
+			where.add(str.toString());
 		}
 
 		// Enable multiple alarms search
 		if (alarmLevel.length > 0) {
-			String str = "";
+			StringBuilder str = new StringBuilder();
 
 			for (int i = 0; i < alarmLevel.length; i++) {
 				if (i == 0)
-					str += "e.alarmLevel in (?";
+					str.append("e.alarmLevel in (?");
 				else
-					str += ",?";
+					str.append(",?");
 				params.add(alarmLevel[i]);
 			}
-			str += ")";
-			where.add(str);
+			str.append(")");
+			where.add(str.toString());
 		}
 
 		if (dateFrom != -1) {
