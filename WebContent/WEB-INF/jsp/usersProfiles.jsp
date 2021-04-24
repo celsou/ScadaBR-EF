@@ -192,8 +192,30 @@
         updateUserProfileImg();
     }
     
+    function verifyProfileName() {
+		if (editingUserProfileId == <c:out value="<%= Common.NEW_ID %>"/>) {
+			if ($("userProfileName").value.trim() == "") {
+				stopImageFader($("saveButton"));
+				alert("<fmt:message key="userProfiles.emptyName"/>");
+				throw "Profile name empty";
+			}
+			
+			names = document.querySelectorAll("#userProfileTable .link");
+			
+			for (var i in names) {
+				if (names[i].innerHTML == $("userProfileName").value) {
+					stopImageFader($("saveButton"));
+					alert("<fmt:message key="userProfiles.nameInUse"/>");
+					throw "Profile name empty or already in use";
+				}
+			}
+		}
+	}
+    
     function saveUserProfile() {
 		startImageFader($("saveButton"));
+    	
+    	verifyProfileName();
     	
     	setUserProfileMessage();
         // Create the list of allowed data sources and data point permissions.

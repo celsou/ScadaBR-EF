@@ -22,28 +22,34 @@ var mango = {};
 //
 // String prototypes
 //
-String.prototype.startsWith = function(str) {
-    if (str.length > this.length)
-        return false;
-    for (var i=0; i<str.length; i++) {
-        if (str.charAt(i) != this.charAt(i))
-            return false;
-    }
-    return true;
-}
-
-String.prototype.trim = function() {
-    return this.replace(/^\s+|\s+$/g,"");
-}
-
-String.prototype.replaceAll = function(de, para){
-	str = this;
-    var pos = str.indexOf(de);
-    while (pos > -1){
-		str = str.replace(de, para);
-		pos = str.indexOf(de);
+if (!String.prototype.startsWith) {
+	String.prototype.startsWith = function(str) {
+		if (str.length > this.length)
+			return false;
+		for (var i=0; i<str.length; i++) {
+			if (str.charAt(i) != this.charAt(i))
+				return false;
+		}
+		return true;
 	}
-    return (str);
+}
+
+if (!String.prototype.trim) {
+	String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/g,"");
+	}
+}
+
+if (!String.prototype.replaceAll) {
+	String.prototype.replaceAll = function(de, para){
+		str = this;
+		var pos = str.indexOf(de);
+		while (pos > -1){
+			str = str.replace(de, para);
+			pos = str.indexOf(de);
+		}
+		return (str);
+	}
 }
 
 //

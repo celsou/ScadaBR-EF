@@ -69,7 +69,7 @@
   Al seleccionar un nivel de alarmas en <b>Enviar correo  de alarmas </b> se enviar&aacute; el nivel correspondiente y sus inferiores, y al seleccionar     
   <em>"Ninguno"</em> no ser&aacute; enviado ning&uacute;n correo para este usuario por este concepto.</p>
 <p>
-  Note que si ya se ha especificado el correo del usuario en un evento del Manejador de Eventos, el sistema s&oacute;lo enviar&aacute; un correo a&uacute;n que est&eacute; configurado en varias opciones similares (no se le enviar&aacute; un duplicado del mismo correo).
+  Note que si ya se ha especificado el correo del usuario en un evento del Manejador de Eventos, el sistema s&oacute;lo enviar&aacute; un correo aunque est&eacute; configurado en varias opciones similares (no se le enviar&aacute; un duplicado del mismo correo).
 </p>
 
 <h1>Privilegios de los Usuarios</h1>
@@ -83,3 +83,11 @@
   individualmente configurado para:  Sin acceso, lectura, o escritura (cuando el punto sea modificable).</p>
 
 <p>Nota: El  acceso de escritura a un punto implica que el usuario podr&aacute; leer este punto.</p>
+
+<p>
+  Alternativamente, desde ScadaBR 1.1 se puede definir un conjunto de privilegios para um grupo de usuarios a trav&eacute;s de los "Perfiles de Usuarios".
+  En este caso, los privilegios individuales para cada fuente de datos ser&aacute;n ocultados. Adem&aacute;s, los Perfiles de Usuarios tambi&eacute;n permiten
+  cambiar los privilegios para listas de supervisi&oacute;n y vistas gr&aacute;ficas. Perfiles de Usuarios s&oacute;lo pueden ser asociados a usuarios que
+  no son administradores.
+</p>
+

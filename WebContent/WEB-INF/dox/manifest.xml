@@ -361,7 +361,9 @@
     <relation id="eventDetectors"/>
   </item>
 
-  <item id="pendingAlarms"/>
+  <item id="pendingAlarms">
+    <relation id="eventsSearch"/>
+  </item>
 
   <item id="eventsSearch"/>
 
