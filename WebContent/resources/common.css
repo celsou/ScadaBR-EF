@@ -406,25 +406,17 @@ html > body .dojoFloatingPaneClient {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
 }
-html > body .dojoFloatingPaneClient p, #help p {
+html > body .dojoFloatingPaneClient p {
 	padding: 0px;
 	margin: 0px 0px 10px 0px;
 }
-#help h1 {
-	/*color: #804000;*/
-	color: #414042;
-	font-size: 15px;
-	font-weight: bold;
-	padding: 0px;
-	margin: 20px 0px 10px 0px;
-}
-html > body .dojoFloatingPaneClient h1, #help h2 {
+html > body .dojoFloatingPaneClient h1 {
 	padding: 0px;
 	margin: 0px 0px 10px 0px;
 	font-size: 13px;
 	font-weight: bold;
 }
-html > body .dojoFloatingPaneClient img, #help img {
+html > body .dojoFloatingPaneClient img {
 	vertical-align: bottom;
 }
 
@@ -478,4 +470,3 @@ html > body .dojoTreeNodeLabelSelected {
 	max-height:100px;
 	overflow:auto;
 }
-

@@ -20,7 +20,7 @@
 --%><%@include file="/WEB-INF/tags/decl.tagf"%><%--
 --%><%@tag body-content="empty"%><%--
 --%><%@attribute name="vc" type="com.serotonin.mango.view.component.ViewComponent" required="true" rtexprvalue="true"%>
-<script type="text/javascript">console.log(jQuery.fn.jquery);</script>
+
 <c:choose>
   <c:when test="${vc.pointComponent && !vc.visible}"><!-- vc ${vc.id} not a point component or not visible --></c:when>
   <c:when test="${vc.pointComponent}">

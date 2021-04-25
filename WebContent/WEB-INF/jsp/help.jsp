@@ -18,12 +18,41 @@
 --%>
 <%@ include file="/WEB-INF/jsp/include/tech.jsp" %>
 <tag:page>
-  <div class="smallTitle"><fmt:message key="common.help"/></div>
-  <br/>
-  
-  <div id="help">
-    <c:if test="${sessionUser.firstLogin}"><h2><fmt:message key="dox.welcomeToMango"/>!</h2></c:if>
-    <c:set var="filepath">/WEB-INF/dox/<fmt:message key="dox.dir"/>/help.html</c:set>
-    <jsp:include page="${filepath}"/>
-  </div>
+
+	<style>
+		@font-face {
+			font-family: Nunito;
+			src: local("Nunito-Regular.ttf"),
+				 url("resources/fonts/Nunito/Nunito-Regular.ttf");
+		}
+	
+		.container { width: 100%; box-sizing: border-box; padding: 5%;}
+		.centerLink { text-align: center; margin: 20px auto auto auto;}
+		
+		.greenBg { background-color: #39B54A; color: #FFFFFF; }
+		.blackBg { background-color: #414042; color: #FFFFFF; }
+		.whiteBg { background-color: #FFFFFF; color: #414042; }
+		
+		.blackLink { color: #414042 !important; transition: 0.1s linear;}
+		.whiteLink { color: #FFFFFF !important; transition: 0.1s linear;}
+		.blackLink:hover { color: #5D5C5E !important; }
+		.whiteLink:hover { color: #E9E9E9 !important; }
+		
+		.center { text-align: center; }
+		.justify { text-align: justify; text-indent: 2em; }
+		.bigText { font-size: 120px !important; }
+		 
+		#help { font-family: 'Nunito', Arial, Helvetica, sans-serif; overflow: hidden; }
+		#help p, #help h1 { margin: 0px; }
+		#help h1 { font-size: 46px; text-align: center; }
+		#help a, #help a:hover, #help a:visited { font-size: 20px; font-family: 'Nunito', Arial, Helvetica, sans-serif; }
+		
+		#help p  { font-size: 30px; }
+		#help p.comment  { font-size: 15px; font-style: italic; color: #AAA8AD; margin-top: 30px; }
+	</style>
+
+	<div id="help">
+		<c:set var="filepath">/WEB-INF/dox/<fmt:message key="dox.dir"/>/help.html</c:set>
+		<jsp:include page="${filepath}"/>
+	</div>
 </tag:page>
