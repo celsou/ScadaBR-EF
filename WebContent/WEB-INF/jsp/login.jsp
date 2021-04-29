@@ -18,94 +18,249 @@
 --%>
 <%@ include file="/WEB-INF/jsp/include/tech.jsp" %>
 <tag:page onload="">
-  <script type="text/javascript">
-/*      compatible = true;
-     
-    function setFocus() {
-         $("username").focus();
-        BrowserDetect.init();
-        
-        $set("browser", BrowserDetect.browser +" "+ BrowserDetect.version +" <fmt:message key="login.browserOnPlatform"/> "+ BrowserDetect.OS);
-        
-        if (checkCombo(BrowserDetect.browser, BrowserDetect.version, BrowserDetect.OS)) {
-            $("browserImg").src = "images/accept.png";
-            show("okMsg");
-            compatible = true;
-        }
-        else {
-            $("browserImg").src = "images/thumb_down.png";
-            show("warnMsg");
-        } 
-    }
-    
-    function nag() {
-        if (!compatible)
-            alert('<fmt:message key="login.nag"/>');
-    }  */
-
-  </script>
-  
-  <table cellspacing="0" cellpadding="0" border="0">
-    <tr>
-      <td>
-        <form action="login.htm" method="post">
-          <table>
-            <spring:bind path="login.username">
-              <tr>
-                <td class="formLabelRequired"><fmt:message key="login.userId"/></td>
-                <td class="formField">
-                  <input id="username" type="text" name="username" value="${status.value}" maxlength="40"/>
-                </td>
-                <td class="formError">${status.errorMessage}</td>
-              </tr>
-            </spring:bind>
-            
-            <spring:bind path="login.password">
-              <tr>
-                <td class="formLabelRequired"><fmt:message key="login.password"/></td>
-                <td class="formField">
-                  <input id="password" type="password" name="password" value="${status.value}" maxlength="20"/>
-                </td>
-                <td class="formError">${status.errorMessage}</td>
-              </tr>
-            </spring:bind>
-                
-            <spring:bind path="login">
-              <c:if test="${status.error}">
-                <td colspan="3" class="formError">
-                  <c:forEach items="${status.errorMessages}" var="error">
-                    <c:out value="${error}"/><br/>
-                  </c:forEach>
-                </td>
-              </c:if>
-            </spring:bind>
-            
-            <tr>
-              <td colspan="2" align="center">
-                <input type="submit" value="<fmt:message key="login.loginButton"/>"/>
-                <tag:help id="welcomeToMango"/>
-              </td>
-              <td></td>
-            </tr>
-          </table>
-        </form>
-        <br/>
-      </td>
-<%--       <td valign="top">
-        <table>
-          <tr>
-            <td valign="top"><img id="browserImg" src="images/magnifier.png"/></td>
-            <td><b><span id="browser"><fmt:message key="login.unknownBrowser"/></span></b></td>
-          </tr>
-          <tr>
-            <td valign="top" colspan="2">
-              <span id="okMsg" style="display:none"><fmt:message key="login.supportedBrowser"/></span>
-              <span id="warnMsg" style="display:none"><fmt:message key="login.unsupportedBrowser"/></span>
-            </td>
-          </tr>
-        </table>
-        <br/><br/>
-      </td> --%>
-    </tr>
-  </table>
+	<script type="text/javascript">
+		function unsupportedWarning() {
+			$("warnings").style.top = "150px";
+			var span = document.querySelector("#warnings .content");
+			span.innerHTML = $("unsupportedMsg").innerHTML;
+			show("warningsBkg");
+		}
+		
+		function showHelp() {
+			MiscDwr.getDocumentationItem("welcomeToMango", function (response) {
+				var span = document.querySelector("#warnings .content");
+				span.innerHTML = response.content;
+			});
+			show("warningsBkg");
+		}
+		
+		function usePng(img) {
+			img.src = img.src.replace(".svg", ".png");
+		}
+		 
+		function togglePassword() {
+			if ($("password").type == "password") {
+				$("password").type = "text";
+				$("pswBtn").src = "images/hide-password.svg";
+			} else {
+				$("password").type = "password";
+				$("pswBtn").src = "images/show-password.svg";
+			}
+		}
+		
+		var browserTested = false;
+		
+		// Test if browser is compatible. This calls newBrowserTest() in
+		// resources/header.js
+		function testBrowser() {
+			if (!browserTested) {
+				var testResult = newBrowserTest();
+				if (testResult == "bad") {
+					// Very old browser. Don't try to run.
+					setInterval(function() {
+						document.write("Unsupported browser!");
+					}, 100);
+				} else if (testResult == "regular") {
+					// Old browser. Show a warning.
+					unsupportedWarning();
+				}
+			}
+			browserTested = true;
+		}
+		
+		dojo.addOnLoad(testBrowser);
+		
+	</script>
+	
+	<c:if test="${!empty sessionUser}">
+		<!-- User already logged in. Go home URL. -->
+		<script>goHomeUrl();</script>
+	</c:if>
+	
+	<!--[if lt IE 10]>
+		<script type="text/javascript">
+			// Don't try to run in IE10 or earlier
+			setInterval(function() {
+				document.write("Unsupported browser!");
+			}, 100);
+		</script>
+	<![endif]-->
+		
+	<style>
+		html > body {
+			/* A soft light gray background */
+			background-color: #F7F7F7;
+		}
+		
+		input::-ms-reveal, input::-ms-clear {
+			/* IE/Edge workaround */
+			display: none !important;
+		}
+		
+		#warningsBkg {
+			background-color: #D2D2D280;
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+			z-index: 10;
+		}
+		
+		#warnings {
+			max-width: 40%;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			ms-transform: translate(-50%, -50%);
+			webkit-transform: translate(-50%, -50%);
+			background-color: #FFFFFF;
+			padding: 8px;
+			color: #444444;
+			font-size: 15px;
+			text-align: justify;
+			text-indent: 2em;
+		}
+		
+		#warnings h1 {
+			text-weight: bold;
+			font-size: 16px;
+		}
+		
+		#loginForm {
+			width: 350px;
+			margin: 50px auto;
+			padding: 8px;
+			border-radius: 6px;
+			font-size: 15px;
+			background-color: #FFFFFF;
+			color: #444444;
+			box-shadow: 0 0 1em #AAAAAA;
+		}
+		
+		#loginForm label, #loginForm input, #loginForm span {
+			display: block;
+			padding: 6px 4px;
+		}
+		
+		#loginForm a, #loginForm a:hover, #loginForm a:visited {
+			font-size: 13px;
+			padding: 4px;
+		}
+		
+		#loginForm input {
+			height: 40px;
+			border-radius: 4px;
+			box-sizing: border-box;
+			font-size: 20px;
+			border: 1px solid #888888;
+		}
+		
+		#loginForm input[type="text"], #loginForm input[type="password"] {
+			width: 100%;
+		}
+		
+		#title {
+			font-size: 30px;
+			text-align: center;
+		}
+		
+		#inputs {
+			margin: 20px 0px;
+		}
+		
+		#submit {
+			width: 70%;
+			margin: 15px auto;
+		}
+		
+		#pswDiv {
+			position: relative;
+		}
+		
+		#pswBtn {
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			width: 30px;
+			height: 30px;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		
+		#pswBtn:hover {
+			background-color: #B7B7B750;
+		}
+		
+		.errorMessage {
+			font-size: 12px;
+			color: #FF0000;
+			text-align: center;
+		}
+		
+		.link {
+			display: block;
+			text-align: right;
+			margin: 6px 0;
+		}
+	</style>
+	
+	<span id="unsupportedMsg" style="display: none;"><fmt:message key="login.unsupportedBrowser"/></span>
+	
+	<div id="warningsBkg" style="display: none;">
+		<div id="warnings" class="borderDiv">
+			<img class="ptr" style="float: right;" src="images/cross.png" onclick="hide('warningsBkg');">
+			<div style="clear: both; height: 10px;"></div>
+			<span class="content"></span>
+		</div>
+	</div>
+	
+	<form action="login.htm" method="post">
+		<div id="loginForm" class="borderDiv">
+			<span id="title"><fmt:message key="header.login"/></span>
+			
+			<div id="inputs">
+				<!-- Username field -->	
+				<spring:bind path="login.username">
+					<label for="username"><fmt:message key="login.userId"/></label>
+					<input id="username" type="text" name="username" value="${status.value}" maxlength="40" autofocus>
+					<c:if test="${status.error}">
+						<span class="errorMessage">${status.errorMessage}</span>
+					</c:if>
+				</spring:bind>
+				
+				<!-- Password field -->
+				<spring:bind path="login.password">
+					<label for="password"><fmt:message key="login.password"/></label>
+					<div id="pswDiv">
+						<input id="password" type="password" name="password" value="${status.value}" maxlength="25"/>
+						<img id="pswBtn" src="images/show-password.svg" onclick="togglePassword();" onerror="usePng(this);">
+					</div>
+					<c:if test="${status.error}">
+						<span class="errorMessage">${status.errorMessage}</span>
+					</c:if>
+				</spring:bind>
+				
+				<!-- Generic error messages -->
+				<spring:bind path="login">
+					<c:if test="${status.error}">
+						<span class="errorMessage">
+							<c:forEach items="${status.errorMessages}" var="error">
+								<c:out value="${error}"/><br>
+							</c:forEach>
+						</span>
+					</c:if>
+				</spring:bind>
+				
+				<!-- Help link -->
+				<div class="link">
+					<a class="ptr" onclick="showHelp();"><fmt:message key="common.help"/></a>
+				</div>
+			</div>
+			
+			<!-- Submit Button -->
+			<input id="submit" class="coloredButton" type="submit" value="<fmt:message key="login.loginButton"/>">
+		</div>
+	</form>
 </tag:page>

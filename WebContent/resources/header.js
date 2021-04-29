@@ -263,6 +263,11 @@ var BrowserDetect = {
             identity: "Firefox"
         },
         {
+            string: navigator.userAgent,
+            subString: "Edge",
+            identity: "Edge"
+        },
+        {
             string: navigator.vendor,
             subString: "Camino",
             identity: "Camino"
@@ -332,4 +337,90 @@ function checkCombo(browser, version, os) {
     if (browser == "Safari" && version > 3 && os == "Android")
         return true;
     return false;
+};
+
+function isBrowserCompatible() {
+	BrowserDetect.init();
+	var browser = BrowserDetect.browser;
+	var version = BrowserDetect.version;
+	var os = BrowserDetect.OS;
+	if (browser == "Firefox" && version > 35)
+		return true;
+	if (browser == "Chrome" && version > 40)
+		return true;
+	if (browser == "Explorer" && version > 11 && os == "Windows")
+        return true;
+    if (browser == "Edge")
+        return true;
+    return false
+}
+
+function newBrowserTest() {
+	var score = 0;
+	
+	// *** The bare minimum (3) ***
+	// JSON support
+	if (JSON)
+		score++;
+	
+	// *** Classlist support ***
+	if (document.body.classList)
+		score++;
+	
+	// *** PageYOfsset/ScrollY ***
+	if (typeof window.pageYOffset == "number" ||
+		typeof window.scrollY == "number")
+		score++;
+	
+	// *** HTML5 features (3) ***
+	// SVG support
+	var svgSupport = !!document.createElementNS &&
+					 !!document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect;
+	if (svgSupport)
+		score++;
+	
+	// Canvas 2D support
+	score++;
+	try {
+		document.createElement("canvas").getContext("2d");
+	} catch (e) {
+		score--;
+	}
+	
+	// HTML5 Audio
+	score++;
+	try {
+		new Audio();
+	} catch (e) {
+		score--;
+	}
+	
+	// *** Desirable features (3) ***
+	// Canvas 3D support
+	score++;
+	try {
+		document.createElement("canvas").getContext("3d");
+	} catch (e) {
+		score--;
+	}
+	
+	// ECMAScript 6 (2015)
+	if (Array.prototype.find)
+		score++;
+	
+	// ECMAScript 2017
+	if (Object.entries)
+		score++;
+	
+	// Return the test result
+	try {
+		console.log("Your browser scored " + score + "/9 on the ScadaBR compatibility test ");
+	} catch (e) {};
+	
+	if (score < 3)
+		return "bad";
+	else if (score < 7)
+		return "regular";
+	else
+		return "good";		
 };

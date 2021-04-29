@@ -19,7 +19,7 @@
 <h1>Overview</h1>
 <p>Meta points are configured by creating a "context" of existing points, 
 which become available for access within the script when it executes. 
-These context points can be any point saved in Mango at the time, including 
+These context points can be any point saved in ScadaBR at the time, including 
 the current point being edited. (The current point must be saved&mdash;i.e. 
 cannot be "new"&mdash;before it will appear in the context point list.)</p>
 
@@ -55,7 +55,7 @@ else {
 }
 return tmp;</pre>
 <p>The above is not intended to calculate any useful value, but rather to show the potential for script complexity.</p>
-<p>In addition to the ECMAScript context, Mango also defines a few useful global functions including max(), min(), avg(), and sum(). (These functions are implemented in a script file located at WEB-INF/scripts/scriptFunctions.js. This file can be altered or extended as necessary to implement your own global functions. The file is loaded once per Mango runtime, and so to deploy changes a system restart is required.) To use them, simply call them from your script, for example:</p>
+<p>In addition to the ECMAScript context, ScadaBR also defines a few useful global functions including max(), min(), avg(), and sum(). (These functions are implemented in a script file located at WEB-INF/scripts/scriptFunctions.js. This file can be altered or extended as necessary to implement your own global functions. The file is loaded once per ScadaBR runtime, and so to deploy changes a system restart is required.) To use them, simply call them from your script, for example:</p>
 <pre>return max(x.value, y.value, z.value);</pre>
 <p>This returns the maximum of the present values of 'x', 'y', and 'z'. Any number of parameters can be provided to any of these global functions.</p>
 <p>Once the script has been entered, click the <img src="images/accept.png"/> icon to execute it and attempt to calculate the result.</p>
@@ -96,7 +96,7 @@ return p.value + 1;
 <p>The script var that represents a point in a script is actually an 'object', in JavaScript terminology. An object is a container of values and functions that can be referenced by their property names. To get a description of the properties available for use in a script var, use the help property, e.g.:</p>
 <pre>return x.help;</pre>
 <p>This script works best if the data type is set to alphanumeric, but this is not required. The help property is identical to the toString() function, which is available on all context objects (i.e. not just script vars).</p>
-<p>The <b>value</b> property is the present value of the point. The JavaScript type of the value is analogous to its Mango type: Binary become boolean, Numeric becomes float, Multistate becomes integer, and Alphanumeric becomes string.</p>
+<p>The <b>value</b> property is the present value of the point. The JavaScript type of the value is analogous to its ScadaBR type: Binary become boolean, Numeric becomes float, Multistate becomes integer, and Alphanumeric becomes string.</p>
 <p>Each script var also implements four functions. The objects returned by these functions depend upon the data type of the point the var refers to. Again, the help property can be used to get a description of the returned object's properties. For the "periodType" parameter in all of the functions below, the following pre-defined global variables can be used: SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, and YEAR.</p>
 <p>The <b>ago()</b> function returns the value that the point had the given amount of time ago. For example, the call "x.ago(HOUR, 3)" returns the point's value exactly 3 hours ago.</p>
 <p>The <b>past()</b> function returns an object containing statistics over the given period ending now. See below for a description of the various statistics objects.</p>

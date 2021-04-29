@@ -394,7 +394,7 @@
             </tr>
             <tr>
               <td class="formLabelRequired"><fmt:message key="users.newPassword"/></td>
-              <td class="formField"><input id="password" type="text"/></td>
+              <td class="formField"><input id="password" type="text" maxlength="20"/></td>
             </tr>
             <tr>
               <td class="formLabelRequired"><fmt:message key="users.email"/></td>

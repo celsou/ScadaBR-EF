@@ -227,6 +227,24 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
 input[type="submit"]:active, input[type="button"]:active, button:active {
 	background-color: #E8E8E7;
 }
+/**
+ * New colored buttons
+ */
+input.coloredButton, button.coloredButton {
+	background-color: #39B54A;
+	color: #FFFFFF;
+	border: none;
+}
+input.coloredButton:hover, button.coloredButton:hover {
+	background-color: #3FC952;
+	color: #FFFFFF;
+	border: none;
+}
+input.coloredButton:active, button.coloredButton:active {
+	background-color: #2B8A38;
+	color: #FFFFFF;
+	border: none;
+}
 
 /**
  * View styles
@@ -404,7 +422,7 @@ html > body .dojoFloatingPaneCloseIcon {
 }
 html > body .dojoFloatingPaneClient {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 10px;
+	font-size: 12px;
 }
 html > body .dojoFloatingPaneClient p {
 	padding: 0px;
@@ -413,7 +431,7 @@ html > body .dojoFloatingPaneClient p {
 html > body .dojoFloatingPaneClient h1 {
 	padding: 0px;
 	margin: 0px 0px 10px 0px;
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: bold;
 }
 html > body .dojoFloatingPaneClient img {
