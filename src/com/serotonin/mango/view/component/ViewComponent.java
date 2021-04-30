@@ -73,14 +73,13 @@ abstract public class ViewComponent implements Serializable, JsonSerializable {
 			d.add(ThumbnailComponent.DEFINITION);
 			d.add(SimpleCompoundComponent.DEFINITION);
 			d.add(ImageChartComponent.DEFINITION);
-			d.add(WirelessTempHumSensor.DEFINITION);
+			// d.add(WirelessTempHumSensor.DEFINITION);
 			d.add(ButtonComponent.DEFINITION);
 			d.add(LinkComponent.DEFINITION);
 			d.add(AlarmListComponent.DEFINITION);
 			d.add(ScriptButtonComponent.DEFINITION);
-			// d.add(FlexBuilderComponent.DEFINITION);
 			d.add(ChartComparatorComponent.DEFINITION);
-			d.add(FlexBuilderComponent.DEFINITION);
+			// d.add(FlexBuilderComponent.DEFINITION);
 			DEFINITIONS = d;
 		}
 		return DEFINITIONS;

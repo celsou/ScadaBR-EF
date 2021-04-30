@@ -1045,3 +1045,26 @@ function updateChartComparatorComponent(idPrefix, width, height) {
 	
 }
 
+// Sort an <select> element
+function sortSelect(selectId) {
+	// Get all options in select
+	var options = $(selectId).children;
+	var size = options.length;
+	
+	// Convert to Array
+	var optArr = new Array();
+	for (var i = 0; i < size; i++)
+		optArr.push(options[i]);
+	
+	// Sort the array
+	optArr.sort(function(a, b) {
+		return (a.innerHTML.localeCompare(b.innerHTML));
+	});
+
+	// Clean select
+	$(selectId).innerHTML = "";	
+	// Append sorted options
+	for (var i = 0; i < size; i++)
+		$(selectId).appendChild(optArr[i]);
+	$(selectId).selectedIndex = 0;
+}

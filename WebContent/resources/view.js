@@ -61,11 +61,11 @@ mango.view.setMessages = function(state) {
     var warningNode = $("c"+ state.id +"Warning");
     if (warningNode && state.messages != null) {
 		// Change icon according to alarm level
-		document.querySelector("#c" + state.id + "Warning > img").src = "images/warn.png";
-		var levels = ["red", "orange", "yellow", "blue", "red_off", "orange_off", "yellow_off", "blue_off"];
+		var levels = ["flag_red", "flag_orange", "flag_yellow", "flag_blue", "warn",
+					  "flag_red_off", "flag_orange_off", "flag_yellow_off", "flag_blue_off"];
 		for (var i in levels) {
-			if (state.messages.search("flag_" + levels[i] + ".png") > 0) {
-				document.querySelector("#c" + state.id + "Warning > img").src = "images/flag_" + levels[i] + ".png";
+			if (state.messages.search(levels[i] + ".png") > 0) {
+				document.querySelector("#c" + state.id + "Warning > img").src = "images/" + levels[i] + ".png";
 				break;
 			}
 		}
@@ -92,11 +92,10 @@ mango.view.setContent = function(state) {
     		comp.innerHTML = state.content;
     	}
     	
+		// New dynamic graphics
         var dyn = $("dyn"+ state.id);
         if (dyn) {
-            eval("var data = "+ dyn.value);
-            if (data.graphic != '')
-                eval("mango.view.graphic."+ data.graphic +".setValue("+ state.id +", "+ data.value +");");
+			mango.view.graphic.configureComponent(dyn, state.id);
         }
         
         // Look for scripts in the content.
@@ -407,144 +406,60 @@ mango.view.custom.setPoint = function(xid, value, callback) {
 };
 
 mango.view.teste = function() {
-	alert('oi');
+	alert('oi, talvez isso seja um Easter Egg');
     
 };
 
 //
-// Graphics
-mango.view.graphic.transform = function(xa, ya, fx, fy, mx, my, a) {
-    for (var i=0; i<xa.length; i++) {
-        // Scale
-        xa[i] *= fx;
-        ya[i] *= fy;
-        
-        // Rotate
-        var point = mango.view.graphic.rotatePoint(xa[i], ya[i], a);
-        xa[i] = point.x;
-        ya[i] = point.y;
-        
-        // Translate
-        xa[i] += mx;
-        ya[i] += my;
-    }
-};
+// New dynamic graphics engine
+mango.view.graphic.dynamic = {};
 
-mango.view.graphic.rotatePoint = function(x, y, a) {
-    var point = {};
-    var cos = Math.cos(a)
-    var sin = Math.sin(a);
-    point.x = x*cos - y*sin;
-    point.y = x*sin + y*cos;     
-    return point;
-};
+mango.view.graphic.configureComponent = function (dyn, elementId) {
+	var elementName = JSON.parse(dyn.value).graphic;
+	
+	if (elementName.length) {
+		// Create a Static div
+		if (!$("c" + elementId + "Static")) {
+			var div = document.createElement("div");
+			div.id = "c" + elementId + "Static";
+			$("c" + elementId).appendChild(div);
+		}
+		
+		// Clear an existing Static div
+		if (!$("c" + elementId + "Static").classList.contains(elementName)) {
+			$("c" + elementId + "Static").innerHTML = "";
+			$("c" + elementId + "Static").className = elementName;
+		}
+		
+		// Update the component
+		var percentage = JSON.parse(dyn.value).value;
+		var width = document.querySelector("#c" + elementId + "Content > img").width || $("c" + elementId).clientWidth;
+		var height = document.querySelector("#c" + elementId + "Content > img").height || $("c" + elementId).clientHeight;
+		mango.view.graphic.runDynamicFunction(elementName, elementId, percentage, width, height);
+	}	
+}
 
-mango.view.graphic.Dial = {};
-mango.view.graphic.Dial.setValue = function(viewComponentId, value) {
-    var g = new jsGraphics("c"+ viewComponentId +"Content");
-    
-    g.clear();
-    
-    var xCenter = 76;
-    var yCenter = 77;
-    
-    var xa = new Array(-3, -1,  1,3,1,-1);
-    var ya = new Array( 0,-52,-52,0,3, 3);
-    var angle = (value * 2 - 1) * 2.1;
-    
-    mango.view.graphic.transform(xa, ya, 1, 1, xCenter, yCenter, angle);
-    
-    g.setColor("#A00000");
-    g.fillPolygon(xa, ya);
-    
-    g.setColor("#202020");
-    g.drawPolygon(xa, ya);
-    g.drawLine(xCenter, yCenter, xCenter, yCenter);
-    g.paint();
-};
+mango.view.graphic.runDynamicFunction = function (funcName, elementId, percentage, width, height) {
+	// If function already exists, run it
+	if(mango.view.graphic.dynamic[funcName])
+		mango.view.graphic.dynamic[funcName](elementId, percentage, width, height);
+	// Else, add function's custom script
+	else {
+		mango.view.graphic.addCustomScript("graphics/" + funcName + "/custom.js");
+		setTimeout(function() {
+			if(mango.view.graphic.dynamic[funcName])
+				mango.view.graphic.dynamic[funcName](elementId, percentage, width, height);
+			else
+				mango.view.graphic.runDynamicFunction(funcName, elementId, percentage, width, height);
+		}, 50);
+	}
+}
 
-mango.view.graphic.SmallDial = {};
-mango.view.graphic.SmallDial.setValue = function(viewComponentId, value) {
-    var g = new jsGraphics("c"+ viewComponentId +"Content");
-    
-    g.clear();
-    
-    var xCenter = 38;
-    var yCenter = 38;
-    
-    var xa = new Array(-2,  0,  0,2,1,-1);
-    var ya = new Array( 0,-26,-26,0,2, 2);
-    var angle = (value * 2 - 1) * 2.1;
-    
-    mango.view.graphic.transform(xa, ya, 1, 1, xCenter, yCenter, angle);
-    
-    g.setColor("#A00000");
-    g.fillPolygon(xa, ya);
-    
-    g.setColor("#202020");
-    g.drawPolygon(xa, ya);
-    g.drawLine(xCenter, yCenter, xCenter, yCenter);
-    g.paint();
-};
-
-mango.view.graphic.VerticalLevel = {};
-mango.view.graphic.VerticalLevel.setValue = function(viewComponentId, value) {
-    var g = new jsGraphics("c"+ viewComponentId +"Content");
-    
-    g.clear();
-    
-    var maxbars = 24;
-    var bars = parseInt(maxbars * value + 0.5);
-    var i, max;
-    
-    // Green
-    max = bars > 18 ? 18 : bars;
-    g.setColor("#008000");
-    for (i=0; i<max; i++)
-        g.fillRect(2, 94 - i*4, 16, 3);
-    
-    // Yellow
-    max = bars > 22 ? 22 : bars;
-    g.setColor("#E5E500");
-    for (i=18; i<max; i++)
-        g.fillRect(2, 94 - i*4, 16, 3);
-    
-    // Red
-    max = bars > 24 ? 24 : bars;
-    g.setColor("#E50000");
-    for (i=22; i<max; i++)
-        g.fillRect(2, 94 - i*4, 16, 3);
-    
-    g.paint();
-};
-
-mango.view.graphic.HorizontalLevel = {};
-mango.view.graphic.HorizontalLevel.setValue = function(viewComponentId, value) {
-    var g = new jsGraphics("c"+ viewComponentId +"Content");
-    
-    g.clear();
-    
-    var maxbars = 24;
-    var bars = parseInt(maxbars * value + 0.5);
-    var i, max;
-    
-    // Green
-    max = bars > 18 ? 18 : bars;
-    g.setColor("#008000");
-    for (i=0; i<max; i++)
-        g.fillRect(2 + i*4, 2, 3, 16);
-    
-    // Yellow
-    max = bars > 22 ? 22 : bars;
-    g.setColor("#E5E500");
-    for (i=18; i<max; i++)
-        g.fillRect(2 + i*4, 2, 3, 16);
-    
-    // Red
-    max = bars > 24 ? 24 : bars;
-    g.setColor("#E50000");
-    for (i=22; i<max; i++)
-        g.fillRect(2 + i*4, 2, 3, 16);
-    
-    g.paint();
-};
+mango.view.graphic.addCustomScript = function(source) {
+	if(!document.querySelector("script[src*='" + source + "']")) {
+		var newScript = document.createElement("script");
+		newScript.src = source;
+		document.querySelector("body > div[style*='padding:5px;']").appendChild(newScript);
+		//console.log(source + " added.");
+	}
+}

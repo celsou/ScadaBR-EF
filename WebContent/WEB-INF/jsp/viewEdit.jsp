@@ -20,7 +20,6 @@
 <%@page import="com.serotonin.mango.view.ShareUser"%>
 
 <tag:page dwr="ViewDwr" onload="doOnload" js="view">
-  <script type="text/javascript" src="resources/wz_jsgraphics.js"></script>
   <script type="text/javascript">
     mango.view.initEditView();
     mango.share.dwr = ViewDwr;
@@ -36,6 +35,7 @@
             mango.share.users = result.shareUsers;
             mango.share.writeSharedUsers(result.viewUsers);
             dwr.util.addOptions($("componentList"), result.componentTypes, "key", "value");
+            sortSelect("componentList");
             settingsEditor.setPointList(result.pointList);
             compoundEditor.setPointList(result.pointList);
             MiscDwr.notifyLongPoll(mango.longPoll.pollSessionId);

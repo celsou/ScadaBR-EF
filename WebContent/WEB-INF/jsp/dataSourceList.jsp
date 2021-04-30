@@ -23,6 +23,7 @@
         DataSourceListDwr.init(function(response) {
             if (response.data.types) {
                 dwr.util.addOptions("dataSourceTypes", response.data.types, "key", "value");
+                sortSelect("dataSourceTypes");
                 show("dataSourceTypesContent");
             }
         });

@@ -18,7 +18,6 @@
 --%>
 <%@ include file="/WEB-INF/jsp/include/tech.jsp"%>
 <tag:page dwr="ViewDwr" js="view">
-	<script type="text/javascript" src="resources/wz_jsgraphics.js"></script>
 	<script type="text/javascript" src="resources/shortcut.js"></script>
 	
 	<script type="text/javascript">

@@ -17,16 +17,20 @@
     along with this program.  If not, see http://www.gnu.org/licenses/.
 --%>
 <%@ include file="/WEB-INF/snippet/common.jsp" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <c:choose>
-  <c:when test="${empty pointComponent.image}"><tag:img png="icon_comp" title="common.noImage"/></c:when>
-  <c:otherwise>
-    <img src="${pointComponent.image}" width="${pointComponent.width}" height="${pointComponent.height}" alt=""
-            <c:if test="${!empty pointComponent.bkgdColorOverride}">style="background-color:${pointComponent.bkgdColorOverride};"</c:if>/>
-  </c:otherwise>
+	<c:when test="${empty pointComponent.image}"><tag:img png="icon_comp" title="common.noImage"/></c:when>
+	<c:otherwise>
+		<img src="${fn:replace(pointComponent.image, '.png', '.svg')}"
+			 width="${pointComponent.width}" height="${pointComponent.height}" onerror="this.src = this.src.replace('.svg','.png')"
+			<c:if test="${!empty pointComponent.bkgdColorOverride}">style="background-color:${pointComponent.bkgdColorOverride};"</c:if>
+		>
+	</c:otherwise>
 </c:choose>
-<input type="hidden" id="dyn${pointComponent.id}" value="{graphic:'${pointComponent.dynamicImageId}',value:'${proportion}'}"/>
+<input type="hidden" id="dyn${pointComponent.id}" value='{"graphic":"${pointComponent.dynamicImageId}","value":"${proportion}"}'/>
 <c:if test="${pointComponent.displayText}">
-  <div style="position:absolute;left:${pointComponent.textX}px;top:${pointComponent.textY}px;">
-    <%@ include file="/WEB-INF/snippet/basicContent.jsp" %>
-  </div>
+	<div class="displayText" style="position:absolute;left:${pointComponent.textX}px;top:${pointComponent.textY}px;">
+		<%@ include file="/WEB-INF/snippet/basicContent.jsp" %>
+	</div>
 </c:if>

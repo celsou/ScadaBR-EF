@@ -1,4 +1,6 @@
-name=SmallDial
+name=Dial
 type=dynamic
-text.x=5
-text.y=68
+width=78
+height=78
+#text.x=0
+#text.y=100
