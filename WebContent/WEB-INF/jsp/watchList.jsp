@@ -32,12 +32,6 @@
     .rowIcons img {
         padding-right: 3px;
     }
-    html > body .dojoSplitContainerSizerH {
-        border: 1px solid #FFFFFF;
-        background-color: #39B54A;
-        margin-top:4px;
-        margin-bottom:4px;
-    }
     .wlComponentMin {
         top:0px;
         left:0px;

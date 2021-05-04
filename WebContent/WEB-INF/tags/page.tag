@@ -33,7 +33,7 @@
   <!-- Meta -->
   <meta http-equiv="content-type" content="application/xhtml+xml;charset=utf-8"/>
   <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta name="Copyright" content="ScadaBR &copy;©2009-2011 Fundação Certi, MCA Sistemas, Unis Sistemas, Conetec, Todos os direitos reservados."/>
+  <meta name="Copyright" content="ScadaBR &copy;ï¿½2009-2011 FundaÃ§Ã£o Certi, MCA Sistemas, Unis Sistemas, Conetec, Todos os direitos reservados."/>
   <meta name="DESCRIPTION" content="ScadaBR Software"/>
   <meta name="KEYWORDS" content="ScadaBR Software"/>
   
@@ -81,6 +81,24 @@
       }
     </script>
   </c:if>
+  <script>
+      var defaultTheme = "green.css";
+      
+      function changeTheme(theme) {
+		if($("uiTheme")) {
+            $("uiTheme").href = "resources/themes/" + theme;
+        } else {
+            var uiTheme = document.createElement("link");
+            uiTheme.id = "uiTheme";
+            uiTheme.rel = "stylesheet";
+            uiTheme.href = "resources/themes/" + theme;
+            document.head.appendChild(uiTheme);
+        }
+            setCookie("theme", theme);
+	  }
+      
+      changeTheme(getCookie("theme") || defaultTheme);
+  </script>
 </head>
 
 <body>
@@ -114,7 +132,7 @@
           <tag:menuItem href="reports.shtm" png="report" key="header.reports"/>
                 
           <c:if test="${sessionUser.dataSourcePermission}">
-            <img src="images/menu_separator.png"/>
+            <img class="menuSeparator">
             <tag:menuItem href="event_handlers.shtm" png="cog" key="header.eventHandlers"/>
             <tag:menuItem href="data_sources.shtm" png="icon_ds" key="header.dataSources"/>
             <tag:menuItem href="scheduled_events.shtm" png="clock" key="header.scheduledEvents"/>
@@ -123,7 +141,7 @@
             <tag:menuItem href="scripting.shtm" png="script_gear" key="header.scripts"/>
           </c:if>
           
-          <img src="images/menu_separator.png"/>
+          <img class="menuSeparator">
           <tag:menuItem href="users.shtm" png="user" key="header.users"/>
           
           <c:if test="${sessionUser.admin}">
@@ -137,7 +155,7 @@
             <tag:menuItem href="sql.shtm" png="script" key="header.sql"/>
           </c:if>
           
-          <img src="images/menu_separator.png"/>
+          <img class="menuSeparator">
           <tag:menuItem href="logout.htm" png="control_stop_blue" key="header.logout"/>
           <tag:menuItem href="help.shtm" png="help" key="header.help"/>
         </c:if>
@@ -154,7 +172,22 @@
           <tag:img png="house" title="header.goHomeUrl" onclick="goHomeUrl()" onmouseover="hideLayer('localeEdit')"/>
           <tag:img png="house_link" title="header.setHomeUrl" onclick="setHomeUrl()" onmouseover="hideLayer('localeEdit')"/>
         </c:if>
-        <div style="display:inline;" onmouseover="showMenu('localeEdit', -40, 10);">
+        <div style="display:inline;" onmouseover="showMenu('themeEdit', -40, 10);hideLayer('localeEdit');">
+          <tag:img png="pallete" title="header.changeTheme"/>
+          <div id="themeEdit" style="visibility:hidden;left:0px;top:15px;" class="labelDiv" onmouseout="hideLayer(this)">
+              <a class="ptr" onclick="changeTheme(defaultTheme)"><fmt:message key="colour.default"/></a><br>
+              <a class="ptr" onclick="changeTheme('black.css')"><fmt:message key="colour.black"/></a><br>
+              <a class="ptr" onclick="changeTheme('blue.css')"><fmt:message key="colour.blue"/></a><br>
+              <a class="ptr" onclick="changeTheme('brown.css')"><fmt:message key="colour.brown"/></a><br>
+              <a class="ptr" onclick="changeTheme('green.css')"><fmt:message key="colour.green"/></a><br>
+              <a class="ptr" onclick="changeTheme('orange.css')"><fmt:message key="colour.orange"/></a><br>
+              <a class="ptr" onclick="changeTheme('pink.css')"><fmt:message key="colour.pink"/></a><br>
+              <a class="ptr" onclick="changeTheme('purple.css')"><fmt:message key="colour.purple"/></a><br>
+              <a class="ptr" onclick="changeTheme('red.css')"><fmt:message key="colour.red"/></a><br>
+          </div>
+        </div>
+
+        <div style="display:inline;" onmouseover="showMenu('localeEdit', -40, 10);hideLayer('themeEdit');">
           <tag:img png="world" title="header.changeLanguage"/>
           <div id="localeEdit" style="visibility:hidden;left:0px;top:15px;" class="labelDiv" onmouseout="hideLayer(this)">
             <c:forEach items="${availableLanguages}" var="lang">
