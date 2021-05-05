@@ -107,7 +107,7 @@
           </tr>
         </table>
       </td>
-      <td valign="top" align="right"><img src="${inline}<@img src="mangoLogoMed.jpg"/>" alt="Logo"/></td>
+      <td valign="top" align="right"><img src="${inline}<@img src="scadabrLogoMed.png"/>" alt="Logo"/></td>
     </tr>
   </table>
 
