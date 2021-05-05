@@ -20,6 +20,7 @@
 <%@page import="com.serotonin.mango.view.ShareUser"%>
 
 <tag:page dwr="ViewDwr" onload="doOnload" js="view">
+  <script type="text/javascript" src="resources/Chart.bundle.min.js"></script>
   <script type="text/javascript" src="resources/fuscabr.js"></script>
   
   <script type="text/javascript">
