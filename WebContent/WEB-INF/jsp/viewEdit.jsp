@@ -38,6 +38,7 @@
             mango.share.users = result.shareUsers;
             mango.share.writeSharedUsers(result.viewUsers);
             dwr.util.addOptions($("componentList"), result.componentTypes, "key", "value");
+            $("componentList").innerHTML += "<option value='html_staticImage'><fmt:message key="graphic.staticImage"/></option>";
             sortSelect("componentList");
             settingsEditor.setPointList(result.pointList);
             compoundEditor.setPointList(result.pointList);
@@ -46,16 +47,23 @@
     }
     
     function addViewComponent() {
-        ViewDwr.addComponent($get("componentList"), function(viewComponent) {
-            createViewComponent(viewComponent, true);
+        var comp = $get("componentList");
+        ViewDwr.addComponent(comp.replace(/_.*/, ""), function(viewComponent) {
+            createViewComponent(viewComponent, true, comp.includes("_"));
             MiscDwr.notifyLongPoll(mango.longPoll.pollSessionId);
         });
     }
     
-    function createViewComponent(viewComponent, center) {
+    function createViewComponent(viewComponent, center, isFake) {
         var content;
-        
-        if (viewComponent.pointComponent)
+		var hasContent = viewComponent.content || false;
+		
+        if (isFake)
+            // Fake template is a ScadaBR-EF workaround
+            content = $("fakeTemplate").cloneNode(true);
+        else if (hasContent && viewComponent.content.includes("<!--FAKE COMPONENT-->"))
+            content = $("fakeTemplate").cloneNode(true);
+        else if (viewComponent.pointComponent)
             content = $("pointTemplate").cloneNode(true);
         else if (viewComponent.defName == 'imageChart')
             content = $("imageChartTemplate").cloneNode(true);
@@ -66,7 +74,7 @@
         else
             content = $("htmlTemplate").cloneNode(true);
         
-        configureComponentContent(content, viewComponent, $("viewContent"), center);
+        configureComponentContent(content, viewComponent, $("viewContent"), center, isFake);
         
         if (viewComponent.defName == 'simpleCompound') {
             childContent = $("compoundChildTemplate").cloneNode(true);
@@ -94,18 +102,31 @@
             updateViewComponentLocation(content.id);
     }
     
-    function configureComponentContent(content, viewComponent, parent, center) {
+    function configureComponentContent(content, viewComponent, parent, center, isFake) {
         content.id = "c"+ viewComponent.id;
         content.viewComponentId = viewComponent.id;
         updateNodeIds(content, viewComponent.id);
         parent.appendChild(content);
+        var hasContent = viewComponent.content || false;
         
-        if (viewComponent.defName == "html" || viewComponent.defName == "link" 
+        if (isFake || (hasContent && viewComponent.content.includes("<!--FAKE COMPONENT-->"))) {
+			if (!viewComponent.content) {
+				// Register fake component in back-end
+				ViewDwr.saveHtmlComponent(viewComponent.id, "<!--FAKE COMPONENT-->");
+				updateHtmlComponentContent(content.id, "<img src='images/plugin.png'>");
+			} else if (viewComponent.content == "<!--FAKE COMPONENT-->") {
+				// Show an plugin icon for empty fake components
+				updateHtmlComponentContent(content.id, "<img src='images/plugin.png'>");
+			} else {
+				// Treat as normal HTML component
+				updateHtmlComponentContent(content.id, viewComponent.content);
+			}
+		} else if (viewComponent.defName == "html" || viewComponent.defName == "link" 
             || viewComponent.defName == "scriptButton" || viewComponent.defName == "flex"
-            	|| viewComponent.defName == "chartComparator")
+            || viewComponent.defName == "chartComparator") {
             // HTML components only get updated at page load and editing.
             updateHtmlComponentContent(content.id, viewComponent.content);
-        
+        }
         show(content);
         
         if (center) {
@@ -167,6 +188,11 @@
         customEditor.open(cid);
     }
     
+    function openFakeEditor(cid) {
+        closeEditors();
+        fakeEditor.open(cid);
+    }
+
     function positionEditor(compId, editorId) {
         // Position and display the renderer editor.
         var pDim = getNodeBounds($("c"+ compId));
@@ -180,6 +206,7 @@
         graphicRendererEditor.close();
         staticEditor.close();
         compoundEditor.close();
+        fakeEditor.close();
     }
     
     function updateViewComponentLocation(divId) {
@@ -387,6 +414,7 @@
                   <%@ include file="/WEB-INF/jsp/include/graphicRendererEditor.jsp" %>
                   <%@ include file="/WEB-INF/jsp/include/compoundEditor.jsp" %>
                   <%@ include file="/WEB-INF/jsp/include/customEditor.jsp" %>
+                  <%@ include file="/WEB-INF/jsp/include/fakeEditor.jsp" %>
                 </div>
               </td>
             </tr>
@@ -450,7 +478,22 @@
             </div>
           </div>
           
-          
+
+          <div id="fakeTemplate" onmouseover="showLayer('c'+ getViewComponentId(this) +'Controls');"
+                  onmouseout="hideLayer('c'+ getViewComponentId(this) +'Controls');"
+                  style="position:absolute;left:0px;top:0px;display:none;">
+            <div id="c_TEMPLATE_Content"><!--FAKE COMPONENT--></div>
+            <div id="c_TEMPLATE_Controls" class="controlsDiv">
+              <table cellpadding="0" cellspacing="1">
+                <tr><td><tag:img png="plugin_edit" onclick="openFakeEditor(getViewComponentId(this))"
+                        title="viewEdit.editPointView"/></td></tr>
+                <tr><td><tag:img png="plugin_delete" onclick="deleteViewComponent(getViewComponentId(this))"
+                        title="viewEdit.deletePointView"/></td></tr>
+              </table>
+            </div>
+          </div>
+
+
           <div id="imageChartTemplate" onmouseover="showLayer('c'+ getViewComponentId(this) +'Controls');"
                   onmouseout="hideLayer('c'+ getViewComponentId(this) +'Controls');"
                   style="position:absolute;left:0px;top:0px;display:none;">

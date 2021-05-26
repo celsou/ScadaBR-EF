@@ -445,7 +445,7 @@ mango.view.graphic.runDynamicFunction = function (funcName, elementId, percentag
 		mango.view.graphic.dynamic[funcName](elementId, percentage, width, height);
 	// Else, add function's custom script
 	else {
-		mango.view.graphic.addCustomScript("graphics/" + funcName + "/custom.js");
+		mango.view.graphic.addCustomScript("graphics/_dynamicScripts/" + funcName + "/custom.js");
 		setTimeout(function() {
 			if(mango.view.graphic.dynamic[funcName])
 				mango.view.graphic.dynamic[funcName](elementId, percentage, width, height);
@@ -460,6 +460,6 @@ mango.view.graphic.addCustomScript = function(source) {
 		var newScript = document.createElement("script");
 		newScript.src = source;
 		document.querySelector("body > div[style*='padding:5px;']").appendChild(newScript);
-		//console.log(source + " added.");
+		// console.log(source + " added.");
 	}
 }

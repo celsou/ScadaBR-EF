@@ -22,7 +22,8 @@
 <c:choose>
 	<c:when test="${empty pointComponent.image}"><tag:img png="icon_comp" title="common.noImage"/></c:when>
 	<c:otherwise>
-		<img src="${fn:replace(pointComponent.image, '.png', '.svg')}"
+		<c:set var="dynImg" value="${pointComponent.dynamicImageId}"/>
+        <img src="graphics/${dynImg}/${dynImg}.svg"
 			 width="${pointComponent.width}" height="${pointComponent.height}" onerror="this.src = this.src.replace('.svg','.png')"
 			<c:if test="${!empty pointComponent.bkgdColorOverride}">style="background-color:${pointComponent.bkgdColorOverride};"</c:if>
 		>

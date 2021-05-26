@@ -458,6 +458,7 @@
             var dynamicImage = graphicRendererEditor.findDynamicImage($get(selectComp));
             if (dynamicImage) {
                 img.src = dynamicImage.imageFilename;
+                img.style.maxHeight = "100px";
                 show(img);
             }
             else

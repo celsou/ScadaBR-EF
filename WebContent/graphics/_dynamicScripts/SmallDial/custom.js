@@ -4,7 +4,7 @@ mango.view.graphic.dynamic["SmallDial"] = function (elementId, percentage, width
 	if(!document.querySelector("#c" + elementId + "Static img.dial-pointer")) {
 		var img = document.createElement("img");
 		
-		img.src = "graphics/SmallDial/pointer.svg";
+		img.src = "graphics/_dynamicScripts/SmallDial/pointer.svg";
 		img.onerror = "this.src = this.src.replace('.svg','.png');";
 		img.style = "position: absolute; top: 0px; left: 0px;";
 		img.classList.add("dial-pointer");
@@ -16,7 +16,7 @@ mango.view.graphic.dynamic["SmallDial"] = function (elementId, percentage, width
 		var style = document.createElement("style");
 		// Customize simple point renderer
 		style.innerHTML  = "#c" + elementId + "Content .displayText { left: 50% !important; transform: translate(-50%, 0); }";
-		style.innerHTML += "#c" + elementId + "Content .displayText { top: " + 43 + "px !important; }";
+		style.innerHTML += "#c" + elementId + "Content .displayText { top: " + 45 + "px !important; }";
 		style.innerHTML += "#c" + elementId + "Content .simpleRenderer { border: none; background-color: #FFFFFFAA; }";
 		style.innerHTML += "#c" + elementId + "Content .simpleRenderer { font-size: " + 11 + "px !important; }";
 		// Enable CSS animations

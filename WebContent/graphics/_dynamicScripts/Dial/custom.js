@@ -4,7 +4,7 @@ mango.view.graphic.dynamic["Dial"] = function (elementId, percentage, width, hei
 	if(!document.querySelector("#c" + elementId + "Static img.dial-pointer")) {
 		var img = document.createElement("img");
 		
-		img.src = "graphics/Dial/pointer.svg";
+		img.src = "graphics/_dynamicScripts/Dial/pointer.svg";
 		img.onerror = "this.src = this.src.replace('.svg','.png');";
 		img.style = "position: absolute; top: 0px; left: 0px;";
 		img.classList.add("dial-pointer");
