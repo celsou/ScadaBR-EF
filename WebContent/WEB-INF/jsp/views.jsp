@@ -19,8 +19,6 @@
 <%@ include file="/WEB-INF/jsp/include/tech.jsp"%>
 <tag:page dwr="ViewDwr" js="view">
 	<script type="text/javascript" src="resources/shortcut.js"></script>
-	<script type="text/javascript" src="resources/Chart.bundle.min.js"></script>
-	<script type="text/javascript" src="resources/fuscabr.js"></script>
 	
 	<script type="text/javascript">
 	
@@ -36,6 +34,8 @@
 
 		
 	});
+	
+	shortcut.add("E+A+S+T+R", fuscabr.common.easterEgg);
 	
 	<c:if test="${!empty currentView}">
       mango.view.initNormalView();

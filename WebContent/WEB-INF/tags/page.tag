@@ -52,6 +52,8 @@
   <script type="text/javascript" src="dwr/interface/MiscDwr.js"></script>
   <script type="text/javascript" src="resources/soundmanager2-nodebug-jsmin.js"></script>
   <script type="text/javascript" src="resources/common.js"></script>
+  <script type="text/javascript" src="resources/fuscabr/fuscabr.js"></script>
+  
   <c:forEach items="${dwr}" var="dwrname">
     <script type="text/javascript" src="dwr/interface/${dwrname}.js"></script></c:forEach>
   <c:forEach items="${js}" var="jsname">

@@ -1076,7 +1076,7 @@ function sortSelect(selectId) {
 function setCookie(c_name,value) {
 	var exdate=new Date();
 	exdate.setDate(exdate.getDate() + 365);
-	var c_value=escape(value) + ("; expires="+exdate.toUTCString());
+	var c_value=escape(value) + ("; expires="+exdate.toUTCString() + "; SameSite=Lax");
 	document.cookie=c_name + "=" + c_value;
 }
     

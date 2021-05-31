@@ -142,14 +142,14 @@ CREATE TABLE maintenanceevents (
   activeHour NUMBER(10,0),
   activeMinute NUMBER(10,0),
   activeSecond NUMBER(10,0),
-  activeCron VARCHAR2(25 CHAR),
+  activeCron VARCHAR2(80 CHAR),
   inactiveYear NUMBER(10,0),
   inactiveMonth NUMBER(10,0),
   inactiveDay NUMBER(10,0),
   inactiveHour NUMBER(10,0),
   inactiveMinute NUMBER(10,0),
   inactiveSecond NUMBER(10,0),
-  inactiveCron VARCHAR2(25 CHAR)
+  inactiveCron VARCHAR2(80 CHAR)
 );
 
 -- Creating Unique Constraint maintenanceEventsUn1 on table maintenanceevents
@@ -800,14 +800,14 @@ CREATE TABLE scheduledevents (
   activeHour NUMBER(10,0),
   activeMinute NUMBER(10,0),
   activeSecond NUMBER(10,0),
-  activeCron VARCHAR2(25 CHAR),
+  activeCron VARCHAR2(80 CHAR),
   inactiveYear NUMBER(10,0),
   inactiveMonth NUMBER(10,0),
   inactiveDay NUMBER(10,0),
   inactiveHour NUMBER(10,0),
   inactiveMinute NUMBER(10,0),
   inactiveSecond NUMBER(10,0),
-  inactiveCron VARCHAR2(25 CHAR)
+  inactiveCron VARCHAR2(80 CHAR)
 );
 
 -- Creating Unique Constraint scheduledEventsUn1 on table scheduledevents

@@ -38,8 +38,8 @@
   <script type="text/javascript" src="dwr/interface/ViewDwr.js"></script>
   <script type="text/javascript" src="dwr/interface/MiscDwr.js"></script>
   <script type="text/javascript" src="resources/view.js"></script>
-  <script type="text/javascript" src="resources/wz_jsgraphics.js"></script>
   <script type="text/javascript" src="resources/header.js"></script>
+  <script type="text/javascript" src="resources/fuscabr/fuscabr.js"></script>
 </head>
 
 <body style="background-color:transparent">
