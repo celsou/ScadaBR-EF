@@ -346,14 +346,14 @@ create table scheduledEvents (
   activeHour int,
   activeMinute int,
   activeSecond int,
-  activeCron varchar(25),
+  activeCron varchar(80),
   inactiveYear int,
   inactiveMonth int,
   inactiveDay int,
   inactiveHour int,
   inactiveMinute int,
   inactiveSecond int,
-  inactiveCron varchar(25),
+  inactiveCron varchar(80),
   primary key (id)
 ) ENGINE=InnoDB;
 alter table scheduledEvents add constraint scheduledEventsUn1 unique (xid);
@@ -534,14 +534,14 @@ create table maintenanceEvents (
   activeHour int,
   activeMinute int,
   activeSecond int,
-  activeCron varchar(25),
+  activeCron varchar(80),
   inactiveYear int,
   inactiveMonth int,
   inactiveDay int,
   inactiveHour int,
   inactiveMinute int,
   inactiveSecond int,
-  inactiveCron varchar(25),
+  inactiveCron varchar(80),
   primary key (id)
 ) ENGINE=InnoDB;
 alter table maintenanceEvents add constraint maintenanceEventsUn1 unique (xid);

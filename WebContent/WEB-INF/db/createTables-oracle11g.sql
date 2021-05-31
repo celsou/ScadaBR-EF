@@ -390,14 +390,14 @@ create table scheduledEvents (
   activeHour number(10),
   activeMinute number(10),
   activeSecond number(10),
-  activeCron varchar2(25),
+  activeCron varchar2(80),
   inactiveYear number(10),
   inactiveMonth number(10),
   inactiveDay number(10),
   inactiveHour number(10),
   inactiveMinute number(10),
   inactiveSecond number(10),
-  inactiveCron varchar2(25),
+  inactiveCron varchar2(80),
   primary key (id)
 ) ;
 
@@ -611,14 +611,14 @@ create table maintenanceEvents (
   activeHour number(10),
   activeMinute number(10),
   activeSecond number(10),
-  activeCron varchar2(25),
+  activeCron varchar2(80),
   inactiveYear number(10),
   inactiveMonth number(10),
   inactiveDay number(10),
   inactiveHour number(10),
   inactiveMinute number(10),
   inactiveSecond number(10),
-  inactiveCron varchar2(25),
+  inactiveCron varchar2(80),
   primary key (id)
 ) ;
 

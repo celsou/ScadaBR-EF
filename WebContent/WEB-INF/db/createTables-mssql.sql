@@ -348,14 +348,14 @@ create table scheduledEvents (
   activeHour int,
   activeMinute int,
   activeSecond int,
-  activeCron nvarchar(25),
+  activeCron nvarchar(80),
   inactiveYear int,
   inactiveMonth int,
   inactiveDay int,
   inactiveHour int,
   inactiveMinute int,
   inactiveSecond int,
-  inactiveCron nvarchar(25),
+  inactiveCron nvarchar(80),
   primary key (id)
 );
 alter table scheduledEvents add constraint scheduledEventsUn1 unique (xid);
@@ -537,14 +537,14 @@ create table maintenanceEvents (
   activeHour int,
   activeMinute int,
   activeSecond int,
-  activeCron nvarchar(25),
+  activeCron nvarchar(80),
   inactiveYear int,
   inactiveMonth int,
   inactiveDay int,
   inactiveHour int,
   inactiveMinute int,
   inactiveSecond int,
-  inactiveCron nvarchar(25),
+  inactiveCron nvarchar(80),
   primary key (id)
 );
 alter table maintenanceEvents add constraint maintenanceEventsUn1 unique (xid);
