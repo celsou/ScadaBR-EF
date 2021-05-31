@@ -14,6 +14,4 @@ Meus arquivos **.war** foram compilados no Eclipse, versão 2020-12 (4.18.0).
 O código-fonte eu puxei do SourceForge e trouxe para o GitHub. Sinceramente, não faço ideia se fora do meu computador esse repositório consegue ser clonado e compilar com sucesso.
 
 ## Bugs conhecidos
-- Atualmente, a versão da FUScaBR incluída no ScadaBR-EF (1.0) não consegue lidar com _data points_ binários, convertendo **true** para **1** e **false** para **0** na hora de criar gráficos.
 - Eu experimentei problemas com o OpenJDK 8 na hora de enviar e-mails. Caso você receba um alarme de erro contendo a mensagem `javax.net.ssl.SSLHandshakeException: No appropriate protocol (protocol is disabled or cipher suites are inappropriate)` edite o arquivo `java.security` (que deve estar em `$JRE/lib/security/java.security`, no meu caso estava em `/etc/java-8-openjdk/security/java.security`) e, na opção `jdk.tls.disabledAlgorithms` remova `TLSv1` e `TLSv1.1` da lista.
-- O Release 0, quando executado no Windows, pode apresentar ao menos dois problemas: o primeiro é um erro ao tentar subir o webapp no Tomcat, que pode ser resolvido excluindo o arquivo `/WEB-INF/lib/serotonin-timer.jar`, o segundo é a falta das imagens de fundo nos GIFs dinâmicos das Representações Gráficas. O segundo bug será corrigido em breve nas próximas versões.
