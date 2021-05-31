@@ -458,6 +458,17 @@ html > body .dojoFloatingPaneClient img {
 	vertical-align: bottom;
 }
 
+.dojoFloatingPane {
+	background-color: #E8E8E8 !important;
+}
+.dojoFloatingPaneClient {
+	background-color: #E8E8E8 !important;;
+}
+.dojoFloatingPaneResizebar {
+	background-color: #E8E8E8 !important;
+}
+
+
 /**
  * Common tree styling
  */
