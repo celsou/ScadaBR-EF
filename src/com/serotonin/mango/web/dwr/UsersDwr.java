@@ -167,7 +167,7 @@ public class UsersDwr extends BaseDwr {
 		}
 
 		// Throw an exception when adding the forbidden word "new" to user data
-		if (username.equals("new") || password.equals("new") || email.equals("new@new.com"))
+		if (username.matches("\\bnew .*") || password.matches("\\bnew .*") || email.matches("\\bnew .*"))
 			throw new PermissionException("Forbidden content in user data", user);
 
 		if (!response.getHasMessages()) {
