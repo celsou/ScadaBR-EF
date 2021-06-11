@@ -85,7 +85,8 @@
             $set("<c:out value="<%= SystemSettingsDao.FUTURE_DATE_LIMIT_PERIOD_TYPE %>"/>", settings.<c:out value="<%= SystemSettingsDao.FUTURE_DATE_LIMIT_PERIOD_TYPE %>"/>);
             $set("<c:out value="<%= SystemSettingsDao.FUTURE_DATE_LIMIT_PERIODS %>"/>", settings.<c:out value="<%= SystemSettingsDao.FUTURE_DATE_LIMIT_PERIODS %>"/>);
             
-            $set("<c:out value="<%= SystemSettingsDao.INSTANCE_DESCRIPTION %>"/>", settings.<c:out value="<%= SystemSettingsDao.INSTANCE_DESCRIPTION %>"/>);
+            // Unescape HTML entities escaped in server-side
+            $set("<c:out value="<%= SystemSettingsDao.INSTANCE_DESCRIPTION %>"/>", dwr.util.unescapeHtml(settings.<c:out value="<%= SystemSettingsDao.INSTANCE_DESCRIPTION %>"/>));
             
             var sel = $("<c:out value="<%= SystemSettingsDao.LANGUAGE %>"/>");
             <c:forEach items="${availableLanguages}" var="lang">

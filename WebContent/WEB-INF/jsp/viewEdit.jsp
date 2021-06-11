@@ -293,6 +293,17 @@
 			$("viewBackground").height = parseInt(height,10) + 30;
 		}
 	}
+	
+	function validateUploadImage() {
+		var file = document.getElementById("backgroundImageMP").value;
+		var extension = file.slice(file.lastIndexOf(".") + 1).toLowerCase();
+		var search = ["gif", "jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "bmp", "dib"].indexOf(extension);
+		if (search == -1) {
+			// Image format invalid.
+			document.getElementById("backgroundImageMP").value = null;
+			alert("Invalid image format!\nSupported image formats are: JPG, PNG, BMP or GIF");
+		}
+	}
     
   </script>
   
@@ -332,7 +343,7 @@
                 <tr>
                   <td class="formLabelRequired"><fmt:message key="viewEdit.background"/></td>
                   <td class="formField">
-                    <input type="file" name="backgroundImageMP"/>
+                    <input type="file" id="backgroundImageMP" name="backgroundImageMP" onchange="validateUploadImage();" />
                   </td>
                   <td class="formError">${status.errorMessage}</td>
                 </tr>
