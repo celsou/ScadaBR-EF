@@ -27,7 +27,6 @@ import com.serotonin.mango.vo.dataSource.modbus.ModbusSerialDataSourceVO.Encodin
 import com.serotonin.modbus4j.ModbusFactory;
 import com.serotonin.modbus4j.ModbusMaster;
 import com.serotonin.modbus4j.exception.ModbusInitException;
-import com.serotonin.modbus4j.serial.SerialPortWrapper;
 import com.serotonin.web.i18n.LocalizableMessage;
 
 import gnu.io.CommPortIdentifier;
@@ -35,17 +34,18 @@ import gnu.io.NoSuchPortException;
 import gnu.io.SerialPort;
 
 public class ModbusSerialDataSource extends ModbusDataSource {
-
 	private final ModbusSerialDataSourceVO configuration;
 	ModbusMaster modbusMaster;
-	private Enumeration portList;
+	private Enumeration<?> portList;
 	private boolean connProblem = false;
 	private boolean firstTime = true;
+
+	private int timeoutPort = 10000;
 
 	public ModbusSerialDataSource(ModbusSerialDataSourceVO configuration) {
 		super(configuration);
 		this.configuration = configuration;
-		portList = CommPortIdentifier.getPortIdentifiers();
+
 	}
 
 	//
@@ -65,12 +65,17 @@ public class ModbusSerialDataSource extends ModbusDataSource {
 		params.setStopBits(configuration.getStopBits());
 		params.setParity(configuration.getParity());
 
+		SerialPortWrapperImpl wrapper = new SerialPortWrapperImpl(params.getCommPortId(), params.getBaudRate(),
+				params.getFlowControlIn(), params.getFlowControlOut(), params.getDataBits(), params.getStopBits(),
+				params.getParity(), timeoutPort);
+
 		if (configuration.getEncoding() == EncodingType.ASCII)
-			modbusMaster = new ModbusFactory().createAsciiMaster((SerialPortWrapper) params);
+			modbusMaster = new ModbusFactory().createAsciiMaster(wrapper);
 		else
-			modbusMaster = new ModbusFactory().createRtuMaster((SerialPortWrapper) params);
+			modbusMaster = new ModbusFactory().createRtuMaster(wrapper);
 
 		super.initialize(modbusMaster);
+
 	}
 
 	@Override
@@ -78,33 +83,27 @@ public class ModbusSerialDataSource extends ModbusDataSource {
 
 		portList = CommPortIdentifier.getPortIdentifiers();
 
-		// System.out.println("Configuration Port: "
-		// + configuration.getCommPortId());
+		// System.out.println("Configuration List Port " + portList);
+		// System.out.println("");
 
 		if (!verifyPort(configuration.getCommPortId())) {
-
-			// System.out.println("Porta nao detectada !");
-
 			if (firstTime) {
+				System.out.println("First Time !");
 				modbusMaster.destroy();
 				firstTime = false;
 			}
-
 			connProblem = true;
 			return;
 		}
-
 		if (connProblem) {
 			connProblem = false;
 			firstTime = true;
 			initialize();
 		}
-
 		super.doPoll(time);
-
 	}
 
-	public SerialPort getPort(String port) {
+	public SerialPort getPort(String port, int timeout) {
 
 		SerialPort serialPort = null;
 
@@ -113,16 +112,14 @@ public class ModbusSerialDataSource extends ModbusDataSource {
 			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
 				if (portId.getName().equals(port)) {
 					try {
-						serialPort = (SerialPort) portId.open(configuration.getCommPortId(), 10000);
+						serialPort = (SerialPort) portId.open(configuration.getCommPortId(), timeout);
 					} catch (Exception e) {
 						e.printStackTrace();
-						System.out.println("Erro ao abrir a porta !");
+						// System.out.println("Error opening port!");
 					}
 				}
 			}
-
 		}
-
 		return serialPort;
 	}
 
@@ -133,14 +130,14 @@ public class ModbusSerialDataSource extends ModbusDataSource {
 		while (portList.hasMoreElements()) {
 			CommPortIdentifier portId = (CommPortIdentifier) portList.nextElement();
 			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-				// System.out.println(portId.getName());
 				if (portId.getName().equals(port)) {
 					p = true;
+					getPort(port, timeoutPort);
+					break;
 				} else
 					p = false;
 			}
 		}
-
 		return p;
 	}
 
@@ -154,4 +151,5 @@ public class ModbusSerialDataSource extends ModbusDataSource {
 
 		return DataSourceRT.getExceptionMessage(e);
 	}
+
 }

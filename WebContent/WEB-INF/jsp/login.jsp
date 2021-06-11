@@ -74,14 +74,16 @@
 			if (document.hidden)
 				setTimeout(hideAutoplayWarning, 2000);
 			else
-				$("autoplayDisabled").style.display = "none";
+				setTimeout(function() {
+					$("autoplayDisabled").style.display = "none";
+				}, 3000);
 		}
 		
 		function detectAutoplay() {
 			canAutoplay.audio().then(({result}) => {
 				if (result === false) {
 					$("autoplayDisabled").style.display = "";
-					setTimeout(hideAutoplayWarning, 6000);
+					setTimeout(hideAutoplayWarning, 4000);
 				}
 			});
 		}

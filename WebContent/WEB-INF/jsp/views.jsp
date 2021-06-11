@@ -35,7 +35,10 @@
 		
 	});
 	
-	shortcut.add("E+A+S+T+R", fuscabr.common.easterEgg);
+	shortcut.add("Ctrl+Alt+E", function() {
+		if (!document.getElementById("fuscabr-easter-egg"))
+			fuscabr.common.easterEgg();
+	});
 	
 	<c:if test="${!empty currentView}">
       mango.view.initNormalView();
