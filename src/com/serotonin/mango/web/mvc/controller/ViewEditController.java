@@ -18,11 +18,14 @@
  */
 package com.serotonin.mango.web.mvc.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -108,21 +111,35 @@ public class ViewEditController extends SimpleFormRedirectController {
 					File dir = new File(path);
 					dir.mkdirs();
 
-					// Get an image id.
-					int imageId = getNextImageId(dir);
+					// Validate image (to prevent XSS)
+					try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes)) {
+						BufferedImage validator = null;
+						validator = ImageIO.read(bis);
 
-					// Create the image file name.
-					String filename = Integer.toString(imageId);
-					int dot = form.getBackgroundImageMP().getOriginalFilename().lastIndexOf('.');
-					if (dot != -1)
-						filename += form.getBackgroundImageMP().getOriginalFilename().substring(dot);
+						// Valid image! Add it to uploads
+						if (validator != null) {
+							// Get an image id.
+							int imageId = getNextImageId(dir);
+							// Create the image file name.
+							String filename = Integer.toString(imageId);
+							int dot = form.getBackgroundImageMP().getOriginalFilename().lastIndexOf('.');
+							if (dot != -1)
+								filename += form.getBackgroundImageMP().getOriginalFilename().substring(dot);
 
-					// Save the file.
-					FileOutputStream fos = new FileOutputStream(new File(dir, filename));
-					fos.write(bytes);
-					fos.close();
+							// Save the file.
+							FileOutputStream fos = new FileOutputStream(new File(dir, filename));
+							fos.write(bytes);
+							fos.close();
 
-					form.getView().setBackgroundFilename(uploadDirectory + filename);
+							form.getView().setBackgroundFilename(uploadDirectory + filename);
+						}
+
+						validator = null;
+
+					} catch (Exception e) {
+						// Invalid image
+						e.printStackTrace();
+					}
 				}
 			}
 		}

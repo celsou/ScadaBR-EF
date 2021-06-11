@@ -121,6 +121,8 @@ public class UsersDwr extends BaseDwr {
 			List<Integer> dataSourcePermissions, List<DataPointAccess> dataPointPermissions, int usersProfileId) {
 		Permissions.ensureAdmin();
 
+		username = username.replace("<", "&lt;").replace(">", "&gt;");
+
 		// Validate the given information. If there is a problem, return an
 		// appropriate error message.
 		HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();
@@ -163,6 +165,10 @@ public class UsersDwr extends BaseDwr {
 			if (disabled)
 				response.addMessage(new LocalizableMessage("users.validate.adminDisable"));
 		}
+
+		// Throw an exception when adding the forbidden word "new" to user data
+		if (username.equals("new") || password.equals("new") || email.equals("new@new.com"))
+			throw new PermissionException("Forbidden content in user data", user);
 
 		if (!response.getHasMessages()) {
 			userDao.saveUser(user);
