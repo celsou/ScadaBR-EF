@@ -43,7 +43,6 @@
 		}
 	});
 	
-	showOpsMessage();
 	window.onload = showOpsMessage;
 	dojo.addOnLoad(showOpsMessage);
 </script>
