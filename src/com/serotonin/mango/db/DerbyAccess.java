@@ -127,7 +127,8 @@ public class DerbyAccess extends DatabaseAccess {
 			// instance.
 			// Create the tables
 			try {
-				FileOutputStream out = new FileOutputStream("logs/createTables.log");
+				File outFile = new File(System.getProperty("java.io.tmpdir") + File.separator + "createTables.log");
+				FileOutputStream out = new FileOutputStream(outFile);
 				Connection conn = DataSourceUtils.getConnection(dataSource);
 				org.apache.derby.tools.ij.runScript(conn, ctx.getResourceAsStream("/WEB-INF/db/createTables-derby.sql"),
 						"ASCII", out, Common.UTF8);
@@ -175,18 +176,15 @@ public class DerbyAccess extends DatabaseAccess {
 	}
 
 	/**
-	 * This method updates the tables with identity autoincrement values that
-	 * are the maximum of the current autoincrement value or max(id)+1. This
-	 * ensures that updates to tables that may have occurred are handled, and
-	 * prevents cases where inserts are attempted with identities that already
-	 * exist.
+	 * This method updates the tables with identity autoincrement values that are
+	 * the maximum of the current autoincrement value or max(id)+1. This ensures
+	 * that updates to tables that may have occurred are handled, and prevents cases
+	 * where inserts are attempted with identities that already exist.
 	 */
 	private void updateIndentityStarts(ExtendedJdbcTemplate ejt) {
-		List<IdentityStart> starts = ejt.query(
-				"select t.tablename, c.columnname, c.autoincrementvalue " + //
-						"from sys.syscolumns c join sys.systables t on c.referenceid = t.tableid " + //
-						"where t.tabletype='T' and c.autoincrementvalue is not null",
-				new GenericRowMapper<IdentityStart>() {
+		List<IdentityStart> starts = ejt.query("select t.tablename, c.columnname, c.autoincrementvalue " + //
+				"from sys.syscolumns c join sys.systables t on c.referenceid = t.tableid " + //
+				"where t.tabletype='T' and c.autoincrementvalue is not null", new GenericRowMapper<IdentityStart>() {
 					@Override
 					public IdentityStart mapRow(ResultSet rs, int index) throws SQLException {
 						IdentityStart is = new IdentityStart();

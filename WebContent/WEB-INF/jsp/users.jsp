@@ -190,7 +190,7 @@
     	var profile = document.getElementById("usersProfilesList");
     	if(profile.options[profile.selectedIndex].value > 0){
     		hideDataSources();  
-    	}else{
+    	} else {
     		//setDataSourcesNone();
     		showDataSources();
     	}
@@ -200,6 +200,18 @@
  		
 		startImageFader($("saveImg"));
     	
+		// Prevent illegal characters in username
+		if ($get("username").includes("<") || $get("username").includes(">")) {
+			alert("Error: illegal characters in username: > or <");
+			return;
+		}
+		
+		// Prevent forbidden word "new" in usernames/passwords/emails
+		if ($get("username").match(/\bnew .*/) || $get("password").match(/\bnew .*/) || $get("email").match(/\bnew .*/)) {
+			alert("Error: you cannot use the word 'new' in these fields!");
+			return;
+		}
+		
 		setUserMessage();
         if (adminUser) {
     		startImageFader($("u"+ editingUserId +"Img"));

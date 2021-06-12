@@ -21,20 +21,33 @@
 <%@page import="com.serotonin.mango.vo.dataSource.modbus.ModbusSerialDataSourceVO"%>
 
 <!-- Temporary warning about Modbus Serial implementation -->
+<script src="resources/shortcut.js"></script>
 <script type="text/javascript">
 	function showOpsMessage() {
-		if (! (document.querySelector("body > #warningContainer")) ) {
+		if (!document.querySelector("body > #warningContainer")) {
 			var warning = document.getElementById("warningContainer").cloneNode(true);
 			document.getElementById("warningContainer").remove();
 			document.body.appendChild(warning);
 		}
 	}
 	
+	function enableExperimentalAccess() {
+		document.getElementById("warningContainer").remove();
+		document.getElementById("warningStyles").remove();
+	}
+	
+	shortcut.add("Ctrl+Alt+X", function() {
+		if (document.getElementById("warningContainer")) {
+			if (window.confirm("[HIC SUNT DRACONES]\n\nDo you really want to access the Modbus Serial data source? The current implementation is experimental and may be unstable.\n\nUSE AT YOUR OWN RISK!"))
+				enableExperimentalAccess();
+		}
+	});
+	
 	window.onload = showOpsMessage;
-	dojo.addOnLoad = showOpsMessage;
+	dojo.addOnLoad(showOpsMessage);
 </script>
 
-<style>
+<style id="warningStyles">
 	#warningContainer { width: 100%; height: 100%; background-color: white; text-align: center; }
 	#warning { margin:20px auto; background-color: #FFC47D; color: #946225; border:2px solid #F69116;
 		   border-radius: 6px; width:  550px; overflow: visible; }

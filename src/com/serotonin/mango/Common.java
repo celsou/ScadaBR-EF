@@ -84,13 +84,13 @@ public class Common {
 	private static String environmentProfileName = "env";
 
 	/*
-	 * Updating the Mango version: - Create a DBUpdate subclass for the old
-	 * version number. This may not do anything in particular to the schema, but
-	 * is still required to update the system settings so that the database has
-	 * the correct version.
+	 * Updating the Mango version: - Create a DBUpdate subclass for the old version
+	 * number. This may not do anything in particular to the schema, but is still
+	 * required to update the system settings so that the database has the correct
+	 * version.
 	 */
 	public static final String getVersion() {
-		return "1.1.0";
+		return "1.1.0 (EF release 2)";
 	}
 
 	public interface ContextKeys {

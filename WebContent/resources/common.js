@@ -1092,3 +1092,12 @@ function getCookie(c_name) {
 			return unescape(y);
 	}
 }
+
+// This is an easter egg displayed in XSS attempts
+function xssMakesMeAngry() {
+	alert("[ ScadaBR is angry ]\n\nSeus Zé ruela!");
+	alert("[ ScadaBR is angry ]\n\nSeus oreiudo!");
+	alert("[ ScadaBR is angry ]\n\nPara com essa conversa mole:");
+	alert("[ ScadaBR is angry ]\n\n\"Vai dá\"");
+	alert("[ ScadaBR is angry ]\n\nNUM VAI DÁ!!!");
+}

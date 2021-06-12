@@ -95,18 +95,17 @@
   }
   
   function changeChangeType() {
-      if(currentChangeType){
-     	 if(typeof $get(changeTypeId) !=='undefined');
-     	 hide(currentChangeType);
-       }
+      if (currentChangeType) {
+          // Close the current change type div.  
+          hide(currentChangeType);
+      }
 
-      if($get("changeTypeId").length>0){
-          var changeTypeId = "divCH"+ $get("changeTypeId");
+      if ($get("changeTypeId").length) {
+          var changeTypeId = "divCH" + $get("changeTypeId");
           currentChangeType = changeTypeId;
-          // Close the current change type div.              
           // Open the selected type.
-           show(changeTypeId);
-       }
+          show(changeTypeId);
+      }
      
       // Update the values.
       var locator = currentPoint.pointLocator;

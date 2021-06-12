@@ -106,7 +106,7 @@
 <body>
 <table width="100%" cellspacing="0" cellpadding="0" border="0" id="mainHeader">
   <tr>
-    <td><img src="images/scadabrLogoMed.png" alt="Logo"/></td>
+    <td><img src="images/scadabrLogoMed.svg" style="max-height: 50px;" alt="ScadaBR Logo"/></td>
     <c:if test="${!simple}">
       <td align="center" width="99%" id="eventsRow">
         <a href="events.shtm">

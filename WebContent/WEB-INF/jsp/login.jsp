@@ -18,6 +18,7 @@
 --%>
 <%@ include file="/WEB-INF/jsp/include/tech.jsp" %>
 <tag:page onload="">
+	<script type="text/javascript" src="resources/can-autoplay.js"></script>
 	<script type="text/javascript">
 		function unsupportedWarning() {
 			$("warnings").style.top = "150px";
@@ -68,8 +69,27 @@
 			browserTested = true;
 		}
 		
-		dojo.addOnLoad(testBrowser);
+		// Audio autoplay detect
+		function hideAutoplayWarning() {
+			if (document.hidden)
+				setTimeout(hideAutoplayWarning, 2000);
+			else
+				setTimeout(function() {
+					$("autoplayDisabled").style.display = "none";
+				}, 3000);
+		}
 		
+		function detectAutoplay() {
+			canAutoplay.audio().then(({result}) => {
+				if (result === false) {
+					$("autoplayDisabled").style.display = "";
+					setTimeout(hideAutoplayWarning, 4000);
+				}
+			});
+		}
+		
+		dojo.addOnLoad(testBrowser);
+		dojo.addOnLoad(detectAutoplay);
 	</script>
 	
 	<c:if test="${!empty sessionUser}">
@@ -204,8 +224,42 @@
 			text-align: right;
 			margin: 6px 0;
 		}
+
+		/* Audio autoplay warning DIV */
+		#autoplayDisabled {
+			position: fixed;
+			top: 15px;
+			left: 20px;
+			font-size: 14px;
+			font-family: Arial, Helvetica, sans-serif;
+			text-align: center;
+			font-weight: bold;
+		}
+
+		#autoplayDisabled .arrow {
+			margin: auto;
+			width: 0;
+			height: 0;
+			border-left: 9px solid transparent;
+			border-right: 9px solid transparent;
+			border-bottom: 15px solid #FF6900FA;
+		}
+		
+		#autoplayDisabled .warning {
+			width: 250px;
+			background-color: #FF6900FA;
+			color: white;
+			
+			padding: 10px;
+			border-radius: 10px;
+		}
 	</style>
 	
+	<div id="autoplayDisabled" style="display: none;" onclick="hideAutoplayWarning();">
+		<div class="arrow"></div>
+		<div class="warning"><fmt:message key="login.autoplayDisabled"/></div>
+	</div>
+
 	<span id="unsupportedMsg" style="display: none;"><fmt:message key="login.unsupportedBrowser"/></span>
 	
 	<div id="warningsBkg" style="display: none;">
@@ -224,7 +278,7 @@
 				<!-- Username field -->	
 				<spring:bind path="login.username">
 					<label for="username"><fmt:message key="login.userId"/></label>
-					<input id="username" type="text" name="username" value="${status.value}" maxlength="40" autofocus>
+					<input id="username" type="text" name="username" value="${fn:escapeXml(status.value)}" maxlength="40" autofocus>
 					<c:if test="${status.error}">
 						<span class="errorMessage">${status.errorMessage}</span>
 					</c:if>
@@ -234,7 +288,7 @@
 				<spring:bind path="login.password">
 					<label for="password"><fmt:message key="login.password"/></label>
 					<div id="pswDiv">
-						<input id="password" type="password" name="password" value="${status.value}" maxlength="25"/>
+						<input id="password" type="password" name="password" value="${fn:escapeXml(status.value)}" maxlength="25"/>
 						<img id="pswBtn" src="images/show-password.svg" onclick="togglePassword();" onerror="usePng(this);">
 					</div>
 					<c:if test="${status.error}">
