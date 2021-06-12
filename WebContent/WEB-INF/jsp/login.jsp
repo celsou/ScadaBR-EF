@@ -278,7 +278,7 @@
 				<!-- Username field -->	
 				<spring:bind path="login.username">
 					<label for="username"><fmt:message key="login.userId"/></label>
-					<input id="username" type="text" name="username" value="${status.value}" maxlength="40" autofocus>
+					<input id="username" type="text" name="username" value="${fn:escapeXml(status.value)}" maxlength="40" autofocus>
 					<c:if test="${status.error}">
 						<span class="errorMessage">${status.errorMessage}</span>
 					</c:if>
@@ -288,7 +288,7 @@
 				<spring:bind path="login.password">
 					<label for="password"><fmt:message key="login.password"/></label>
 					<div id="pswDiv">
-						<input id="password" type="password" name="password" value="${status.value}" maxlength="25"/>
+						<input id="password" type="password" name="password" value="${fn:escapeXml(status.value)}" maxlength="25"/>
 						<img id="pswBtn" src="images/show-password.svg" onclick="togglePassword();" onerror="usePng(this);">
 					</div>
 					<c:if test="${status.error}">

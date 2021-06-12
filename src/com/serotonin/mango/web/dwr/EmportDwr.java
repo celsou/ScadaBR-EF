@@ -108,6 +108,10 @@ public class EmportDwr extends BaseDwr {
 			boolean systemSettings, boolean usersProfiles) {
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 
+		// Only admins can export system data
+		User user = Common.getUser();
+		Permissions.ensureAdmin(user);
+
 		if (graphicalViews)
 			data.put(GRAPHICAL_VIEWS, new ViewDao().getViews());
 		if (dataSources)
@@ -155,7 +159,7 @@ public class EmportDwr extends BaseDwr {
 		if (pointValues) {
 			List<PointValueJSONWrapper> allWrappedValues = new ArrayList<PointValueJSONWrapper>();
 
-			long antes = System.currentTimeMillis();
+			// long antes = System.currentTimeMillis();
 			PointValueDao dao = new PointValueDao();
 			for (DataPointVO dataPointVO : allDataPoints) {
 				allWrappedValues.addAll(PointValueJSONWrapper.wrapPointValues(dataPointVO.getXid(),
