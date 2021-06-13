@@ -3,6 +3,9 @@
 O ScadaBR-EF (Enhanced Font-end) é um projeto experimental, sem qualquer vínculo com o ScadaBR original ou com o Scada-LTS. A principal intenção desse projeto é gerar uma versão do ScadaBR estável e atualizada com as tecnologias disponíveis em 2021, através de um front-end com várias melhorias de visual e usabilidade. Além disso, o ScadaBR-EF traz diversas correções de pequenos bugs que melhoram a experiência do usuário no dia a dia.
 
 ## Instalação
+A partir do release 2 o ScadaBR-EF tem instaladores para Windows e Linux, obtenha-os na [página dos releases](https://github.com/celsou/ScadaBR-EF/releases/latest/).
+
+Se você quiser ou precisar realizar uma instalação manual, siga estes passos:
 - Instale o Java (ou [OpenJDK](https://adoptopenjdk.net/releases.html?variant=openjdk8&jvmVariant=hotspot)) 8
 - Instale o [Tomcat 8.5](https://tomcat.apache.org/download-80.cgi) ou [9](https://tomcat.apache.org/download-90.cgi)
 - Faça o download do [último release](https://github.com/celsou/ScadaBR-EF/releases/latest/)
