@@ -2,6 +2,15 @@
 ## Sobre
 O ScadaBR-EF (Enhanced Font-end) é um projeto experimental, sem qualquer vínculo com o ScadaBR original ou com o Scada-LTS. A principal intenção desse projeto é gerar uma versão do ScadaBR estável e atualizada com as tecnologias disponíveis em 2021, através de um front-end com várias melhorias de visual e usabilidade. Além disso, o ScadaBR-EF traz diversas correções de pequenos bugs que melhoram a experiência do usuário no dia a dia.
 
+## Instalação
+- Instale o Java (ou [OpenJDK](https://adoptopenjdk.net/releases.html?variant=openjdk8&jvmVariant=hotspot)) 8
+- Instale o [Tomcat 8.5](https://tomcat.apache.org/download-80.cgi) ou [9](https://tomcat.apache.org/download-90.cgi)
+- Faça o download do [último release](https://github.com/celsou/ScadaBR-EF/releases/latest/)
+- Extraia o arquivo `.war` e copie a pasta extraída para dentro da pasta `webapps/`, no Tomcat
+- Reinicie o Tomcat
+
+Obs.: o banco de dados usado por padrão é o Derby. Caso você queira utilizar outro banco de dados (como o MySql) a configuração a ser realizada é a mesma que seria feita para outras versões do ScadaBR (isto é, editar o arquivo `/WEB-INF/classes/env.properties`).
+
 ## O ScadaBR-EF é estável?
 Em teoria, sim. Uma vez que o foco desse projeto é melhorar o front-end do ScadaBR, poucas foram as alterações no código Java em si. Portanto, o ScadaBR-EF deveria ser tão estável quanto o ScadaBR 1.1 CE, no qual foi baseado. Entretanto, como eu não pude realizar testes em cenários reais (dos protocolos de comunicação), não é possível garantir que o ScadaBR-EF realmente funcione de forma satisfatória.
 
