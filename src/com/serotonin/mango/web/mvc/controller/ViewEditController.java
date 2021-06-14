@@ -113,11 +113,25 @@ public class ViewEditController extends SimpleFormRedirectController {
 
 					// Validate image (to prevent XSS)
 					try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes)) {
-						BufferedImage validator = null;
-						validator = ImageIO.read(bis);
+						BufferedImage validImage = null;
+						validImage = ImageIO.read(bis);
+
+						boolean validExtension = false;
+						String[] supportedExtensions = new String[] { "gif", "jpg", "jpeg", "jfif", "pjpeg", "pjp",
+								"png", "bmp", "dib" };
+						String extension = "";
+
+						int foo = form.getBackgroundImageMP().getOriginalFilename().lastIndexOf('.') + 1;
+						if (foo != -1)
+							extension = form.getBackgroundImageMP().getOriginalFilename().substring(foo);
+
+						for (String s : supportedExtensions) {
+							if (s.equals(extension.toLowerCase()))
+								validExtension = true;
+						}
 
 						// Valid image! Add it to uploads
-						if (validator != null) {
+						if (validImage != null && validExtension == true) {
 							// Get an image id.
 							int imageId = getNextImageId(dir);
 							// Create the image file name.
@@ -134,7 +148,7 @@ public class ViewEditController extends SimpleFormRedirectController {
 							form.getView().setBackgroundFilename(uploadDirectory + filename);
 						}
 
-						validator = null;
+						validImage = null;
 
 					} catch (Exception e) {
 						// Invalid image
