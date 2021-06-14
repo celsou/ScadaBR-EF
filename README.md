@@ -1,8 +1,11 @@
 # ScadaBR-EF
 ## Sobre
-O ScadaBR-EF (Enhanced Font-end) é um projeto experimental, sem qualquer vínculo com o ScadaBR original ou com o Scada-LTS. A principal intenção desse projeto é gerar uma versão do ScadaBR estável e atualizada com as tecnologias disponíveis em 2021, através de um front-end com várias melhorias de visual e usabilidade. Além disso, o ScadaBR-EF traz diversas correções de pequenos bugs que melhoram a experiência do usuário no dia a dia.
+O ScadaBR-EF (Enhanced Font-end) é um projeto experimental, sem vínculo direto com o ScadaBR original ou com o Scada-LTS. A principal intenção desse projeto é gerar uma versão do ScadaBR estável e mais atualizada com as tecnologias disponíveis em 2021, através de um front-end com várias melhorias de visual e usabilidade. Além disso, o ScadaBR-EF traz diversas correções de pequenos bugs que melhoram a experiência do usuário no dia a dia.
 
 ## Instalação
+A partir do release 2, o ScadaBR-EF tem instaladores para Windows e Linux, obtenha-os na [página dos releases](https://github.com/celsou/ScadaBR-EF/releases/latest/).
+
+Se você quiser ou precisar realizar uma instalação manual, siga estes passos:
 - Instale o Java (ou [OpenJDK](https://adoptopenjdk.net/releases.html?variant=openjdk8&jvmVariant=hotspot)) 8
 - Instale o [Tomcat 8.5](https://tomcat.apache.org/download-80.cgi) ou [9](https://tomcat.apache.org/download-90.cgi)
 - Faça o download do [último release](https://github.com/celsou/ScadaBR-EF/releases/latest/)
@@ -20,7 +23,8 @@ O ScadaBR-EF não foi criado com qualquer intenção de ser um concorrente do Sc
 ## Em que o ScadaBR-EF roda?
 Eu estou executando com sucesso o ScadaBR-EF no Linux Mint 19.1 (baseado no Ubuntu 18.04) com OpenJDK 8 (equivale ao Java 8) e Tomcat 8.5.39 (provavelmente rode no Tomcat 9 também).
 Meus arquivos **.war** foram compilados no Eclipse, versão 2020-12 (4.18.0).
-O código-fonte eu puxei do SourceForge e trouxe para o GitHub. Sinceramente, não faço ideia se fora do meu computador esse repositório consegue ser clonado e compilar com sucesso.
+O código-fonte eu puxei do SourceForge e trouxe para o GitHub. Como eu não sei muito sobre Java e Eclipse, não sei dizer esse repositório pode ser clonado e compilar em outro computador sem precisar alterar alguma configuração.
 
 ## Bugs conhecidos
 - Eu experimentei problemas com o OpenJDK 8 na hora de enviar e-mails. Caso você receba um alarme de erro contendo a mensagem `javax.net.ssl.SSLHandshakeException: No appropriate protocol (protocol is disabled or cipher suites are inappropriate)` edite o arquivo `java.security` (que deve estar em `$JRE/lib/security/java.security`, no meu caso estava em `/etc/java-8-openjdk/security/java.security`) e, na opção `jdk.tls.disabledAlgorithms` remova `TLSv1` e `TLSv1.1` da lista.
+- Você só pode abrir uma Representação Gráfica por vez no mesmo navegador. Essa limitação, herdada do ScadaBR, é bastante complexa e eu não consegui resolvê-la no ScadaBR-EF, infelizmente.
