@@ -1,4 +1,7 @@
 # ScadaBR-EF
+
+### Aviso: A versão mais atual do ScadaBR-EF é o [Release 2](https://github.com/celsou/ScadaBR-EF/releases/tag/v2). Não pretendo lançar novas versões num futuro próximo (motivo: fui pra faculdade).
+
 ## Sobre
 O ScadaBR-EF (Enhanced Font-end) é um projeto experimental, sem vínculo direto com o ScadaBR original ou com o Scada-LTS. A principal intenção desse projeto é gerar uma versão do ScadaBR estável e mais atualizada com as tecnologias disponíveis em 2021, através de um front-end com várias melhorias de visual e usabilidade. Além disso, o ScadaBR-EF traz diversas correções de pequenos bugs que melhoram a experiência do usuário no dia a dia.
 
@@ -7,7 +10,7 @@ A partir do release 2, o ScadaBR-EF tem instaladores para Windows e Linux, obten
 
 Se você quiser ou precisar realizar uma instalação manual, siga estes passos:
 - Instale o Java (ou [OpenJDK](https://adoptopenjdk.net/releases.html?variant=openjdk8&jvmVariant=hotspot)) 8
-- Instale o [Tomcat 8.5](https://tomcat.apache.org/download-80.cgi) ou [9](https://tomcat.apache.org/download-90.cgi)
+- Instale o [Tomcat 8.5](https://tomcat.apache.org/download-80.cgi) ou [Tomcat 9](https://tomcat.apache.org/download-90.cgi)
 - Faça o download do [último release](https://github.com/celsou/ScadaBR-EF/releases/latest/)
 - Extraia o arquivo `.war` e copie a pasta extraída para dentro da pasta `webapps/`, no Tomcat
 - Reinicie o Tomcat
