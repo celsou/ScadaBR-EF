@@ -18,8 +18,6 @@
  */
 package com.serotonin.mango.rt.dataSource.modbus;
 
-import java.util.Enumeration;
-
 import com.serotonin.io.serial.SerialParameters;
 import com.serotonin.mango.rt.dataSource.DataSourceRT;
 import com.serotonin.mango.vo.dataSource.modbus.ModbusSerialDataSourceVO;
@@ -29,14 +27,14 @@ import com.serotonin.modbus4j.ModbusMaster;
 import com.serotonin.modbus4j.exception.ModbusInitException;
 import com.serotonin.web.i18n.LocalizableMessage;
 
+import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
-import gnu.io.SerialPort;
+import gnu.io.PortInUseException;
 
 public class ModbusSerialDataSource extends ModbusDataSource {
 	private final ModbusSerialDataSourceVO configuration;
 	ModbusMaster modbusMaster;
-	private Enumeration<?> portList;
 	private boolean connProblem = false;
 	private boolean firstTime = true;
 
@@ -80,64 +78,50 @@ public class ModbusSerialDataSource extends ModbusDataSource {
 
 	@Override
 	protected void doPoll(long time) {
-
-		portList = CommPortIdentifier.getPortIdentifiers();
-
-		// System.out.println("Configuration List Port " + portList);
-		// System.out.println("");
-
-		if (!verifyPort(configuration.getCommPortId())) {
-			if (firstTime) {
-				System.out.println("First Time !");
-				modbusMaster.destroy();
-				firstTime = false;
-			}
+		if (!verifyPort(configuration.getCommPortId()) && firstTime) {
+			// Problem in serial port
+			System.out.println("First Time!");
+			modbusMaster.destroy();
+			firstTime = false;
 			connProblem = true;
 			return;
 		}
+
 		if (connProblem) {
+			// Reload modbusMaster to attempt to fix problems
 			connProblem = false;
-			firstTime = true;
 			initialize();
 		}
+
 		super.doPoll(time);
-	}
-
-	public SerialPort getPort(String port, int timeout) {
-
-		SerialPort serialPort = null;
-
-		while (portList.hasMoreElements()) {
-			CommPortIdentifier portId = (CommPortIdentifier) portList.nextElement();
-			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-				if (portId.getName().equals(port)) {
-					try {
-						serialPort = (SerialPort) portId.open(configuration.getCommPortId(), timeout);
-					} catch (Exception e) {
-						e.printStackTrace();
-						// System.out.println("Error opening port!");
-					}
-				}
-			}
-		}
-		return serialPort;
+		firstTime = true;
 	}
 
 	public boolean verifyPort(String port) {
-
 		boolean p = false;
 
-		while (portList.hasMoreElements()) {
-			CommPortIdentifier portId = (CommPortIdentifier) portList.nextElement();
-			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-				if (portId.getName().equals(port)) {
-					p = true;
-					getPort(port, timeoutPort);
-					break;
-				} else
-					p = false;
+		try {
+			CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(port);
+
+			if (portIdentifier.isCurrentlyOwned()) {
+				// Port exists and is in use
+				p = true;
+			} else {
+				// Test if port exists
+				CommPort commPort = portIdentifier.open(port, timeoutPort);
+				if (commPort != null)
+					commPort.close();
+				p = true;
 			}
+		} catch (PortInUseException e) {
+			// Port exists and is in use
+			p = true;
+		} catch (NoSuchPortException e) {
+			// Port does not exist
+		} catch (Exception e) {
+			// Unknown error
 		}
+
 		return p;
 	}
 

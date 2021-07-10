@@ -76,6 +76,7 @@ import com.serotonin.mango.rt.dataSource.meta.ResultTypeException;
 import com.serotonin.mango.rt.dataSource.meta.ScriptExecutor;
 import com.serotonin.mango.rt.dataSource.meta.UndefinedResultException;
 import com.serotonin.mango.rt.dataSource.modbus.ModbusDataSource;
+import com.serotonin.mango.rt.dataSource.modbus.SerialPortWrapperImpl;
 import com.serotonin.mango.rt.dataSource.onewire.Network;
 import com.serotonin.mango.rt.dataSource.onewire.NetworkPath;
 import com.serotonin.mango.rt.dataSource.onewire.OneWireContainerInfo;
@@ -169,7 +170,6 @@ import com.serotonin.modbus4j.ip.IpParameters;
 import com.serotonin.modbus4j.locator.BaseLocator;
 import com.serotonin.modbus4j.msg.ModbusRequest;
 import com.serotonin.modbus4j.msg.ReadResponse;
-import com.serotonin.modbus4j.serial.SerialPortWrapper;
 import com.serotonin.util.IpAddressUtils;
 import com.serotonin.util.StringUtils;
 import com.serotonin.viconics.RequestFailureException;
@@ -615,13 +615,17 @@ public class DataSourceEditDwr extends DataSourceListDwr {
 		params.setStopBits(stopBits);
 		params.setParity(parity);
 
+		SerialPortWrapperImpl wrapper = new SerialPortWrapperImpl(params.getCommPortId(), params.getBaudRate(),
+				params.getFlowControlIn(), params.getFlowControlOut(), params.getDataBits(), params.getStopBits(),
+				params.getParity(), timeout);
+
 		EncodingType encodingType = EncodingType.valueOf(encoding);
 
 		ModbusMaster modbusMaster;
 		if (encodingType == EncodingType.ASCII)
-			modbusMaster = new ModbusFactory().createAsciiMaster((SerialPortWrapper) params);
+			modbusMaster = new ModbusFactory().createAsciiMaster(wrapper);
 		else
-			modbusMaster = new ModbusFactory().createRtuMaster((SerialPortWrapper) params);
+			modbusMaster = new ModbusFactory().createRtuMaster(wrapper);
 		modbusMaster.setTimeout(timeout);
 		modbusMaster.setRetries(retries);
 
