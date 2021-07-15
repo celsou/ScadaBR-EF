@@ -105,13 +105,20 @@ public class SerialPortWrapperImpl implements SerialPortWrapper {
 
 	@Override
 	public void open() throws Exception {
-		// System.out.println(commPortId);
+		// System.out.println("Opening serial port " + commPortId);
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(commPortId);
+		CommPort commPort;
 
-		// System.out.println(commPortId);
-		CommPort commPort = portIdentifier.open(commPortId, timeOutComPort);
+		try {
+			commPort = portIdentifier.open(commPortId, timeOutComPort);
+		} catch (Exception e) {
+			System.out.println("SerialPortWrapperImpl: error opening serial port " + commPortId);
+			e.printStackTrace();
+			// Rethrow
+			throw e;
+		}
 
-		if (commPort instanceof SerialPort) {
+		if (commPort != null && commPort instanceof SerialPort) {
 			serialPort = (SerialPort) commPort;
 			try {
 				serialPort.setSerialPortParams(this.getBaudRate(), this.getDataBits(), this.getStopBits(),
@@ -121,7 +128,6 @@ public class SerialPortWrapperImpl implements SerialPortWrapper {
 				e.printStackTrace();
 			}
 			// System.out.println("Open " + this.commPortId + " sucessfully !");
-			// return serialPort;
 		} else {
 			// System.out.println("Oops!");
 		}
@@ -133,6 +139,7 @@ public class SerialPortWrapperImpl implements SerialPortWrapper {
 		try {
 			in = serialPort.getInputStream();
 		} catch (IOException e) {
+			System.out.println("SerialPortWrapperImpl: error getting input stream");
 			e.printStackTrace();
 		}
 		return in;
@@ -144,6 +151,7 @@ public class SerialPortWrapperImpl implements SerialPortWrapper {
 		try {
 			out = serialPort.getOutputStream();
 		} catch (IOException e) {
+			System.out.println("SerialPortWrapperImpl: error getting output stream");
 			e.printStackTrace();
 		}
 

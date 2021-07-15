@@ -18,6 +18,7 @@
  */
 package com.serotonin.mango.rt.dataSource.modbus;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -238,17 +239,15 @@ abstract public class ModbusDataSource extends PollingDataSource implements Mess
 					dataPoint.setAttribute(ATTR_DISCONNECTED_KEY, true);
 				} else {
 					/*
-					 * When an event is raised from the Callback
-					 * receivedException() interface, points are updated with
-					 * false or 0; The event is usually a NoKeyFound in the
+					 * When an event is raised from the Callback receivedException() interface,
+					 * points are updated with false or 0; The event is usually a NoKeyFound in the
 					 * WaitingRoom, due to previous timeout.
 					 * 
-					 * The eventRaised flag prevents data being writen with
-					 * invalid values in those cases.
+					 * The eventRaised flag prevents data being writen with invalid values in those
+					 * cases.
 					 * 
-					 * Note: This usually avoids first poll if previous
-					 * DataSource Exception Event was raised, but afterwards
-					 * it´s effective. TODO: Treat this type of exception
+					 * Note: This usually avoids first poll if previous DataSource Exception Event
+					 * was raised, but afterwards it´s effective. TODO: Treat this type of exception
 					 * only... but how?!
 					 */
 					LOG.trace("Point: " + locator.getVO().getOffset() + " eventRaised: " + eventRaised);
@@ -473,7 +472,12 @@ abstract public class ModbusDataSource extends PollingDataSource implements Mess
 		LOG.debug("Modbus exception: " + e.getLocalizedMessage());
 		// eventRaised = true; // DataPoint protection against invalid values.
 		// If it´s used, DS with unstable connections won´t communicate at all!
-		raiseEvent(DATA_SOURCE_EXCEPTION_EVENT, System.currentTimeMillis(), true,
-				new LocalizableMessage("event.modbus.master", e.getMessage()));
+		if (e instanceof IOException) {
+			raiseEvent(DATA_SOURCE_EXCEPTION_EVENT, System.currentTimeMillis(), true,
+					new LocalizableMessage("event.modbus.ioException"));
+		} else {
+			raiseEvent(DATA_SOURCE_EXCEPTION_EVENT, System.currentTimeMillis(), true,
+					new LocalizableMessage("event.modbus.master", e.getMessage()));
+		}
 	}
 }

@@ -24,25 +24,26 @@
 <script src="resources/shortcut.js"></script>
 <script type="text/javascript">
 	function showOpsMessage() {
-		if (!document.querySelector("body > #warningContainer")) {
-			var warning = document.getElementById("warningContainer").cloneNode(true);
-			document.getElementById("warningContainer").remove();
-			document.body.appendChild(warning);
+		if (getCookie("modbusWarning") != "disabled") {
+			if (!document.querySelector("body > #warningContainer")) {
+				var warning = document.getElementById("warningContainer").cloneNode(true);
+				document.getElementById("warningContainer").remove();
+				document.body.appendChild(warning);
+			}
+		} else {
+			enableExperimentalAccess();
 		}
 	}
 	
 	function enableExperimentalAccess() {
+		// Disable warnings
+		if (document.getElementById("disableWarning") && document.getElementById("disableWarning").checked)
+			setCookie("modbusWarning", "disabled");
+
 		document.getElementById("warningContainer").remove();
 		document.getElementById("warningStyles").remove();
 	}
-	
-	shortcut.add("Ctrl+Alt+X", function() {
-		if (document.getElementById("warningContainer")) {
-			if (window.confirm("[HIC SUNT DRACONES]\n\nDo you really want to access the Modbus Serial data source? The current implementation is experimental and may be unstable.\n\nUSE AT YOUR OWN RISK!"))
-				enableExperimentalAccess();
-		}
-	});
-	
+		
 	window.onload = showOpsMessage;
 	dojo.addOnLoad(showOpsMessage);
 </script>
@@ -55,26 +56,28 @@
 	#warning p { font-size: 15px; margin: 3px 8px;  }
 	
 	.smallItalic { font-size: 11px !important; font-style: italic; }
-	#back, #back:visited, #back:link, #back:hover { font-size: 15px !important; color: #946225; cursor: pointer; }
-	#back:hover { color: #D48C35; }
+	.bigLink, .bigLink:visited, .bigLink:link, .bigLink:hover { font-size: 15px !important; color: #946225; cursor: pointer; }
+	.bigLink:hover { color: #D48C35; }
 	
 	td.footer, div[style*="padding:5px;"] { display:none !important;}
 </style>
 
 <div id="warningContainer">
 	<div id="warning">
-		<h1>:(</h1>
-		<p>Unfortunately, Modbus Serial communication is not working in this version of ScadaBR (1.1CE)</p>
-		<p>Please consider using a Modbus Serial/TCP converter or migrating to ScadaBR 1.0CE</p>
-		<p>We are sorry for the inconvenience</p>
+		<h1>Caution!</h1>
+		<p>Modbus Serial communication can be unstable in this version of ScadaBR-EF</p>
+		<p>Use this data source at your own risk or go back</p>
 		
 		<p style="margin: 40px;"></p>
 		
-		<p class="smallItalic">Infelizmente, a comunica&ccedil;&atilde;o Modbus Serial n&atilde;o est&aacute; funcionando nesta vers&atilde;o do ScadaBR (1.1CE)</p>
-		<p class="smallItalic">Por favor, considere utilizar um conversor Modbus Serial/TCP ou migrar para o ScadaBR 1.0CE</p>
-		<p class="smallItalic">Pedimos desculpas pelo inconveniente</p>
+		<p class="smallItalic">A comunica&ccedil;&atilde;o Modbus Serial pode ser inst&aacute;vel nesta vers&atilde;o do ScadaBR-EF</p>
+		<p class="smallItalic">Use este data source por sua conta e risco ou retorne &agrave; p&aacute;gina anterior</p>
 	</div>
-	<a id="back" href="data_sources.shtm">Back</a>
+	<input id="disableWarning" type="checkbox"><label>Don't show this warning again</label>
+	<br>
+	<a class="bigLink" href="data_sources.shtm">Back</a>
+	<br>
+	<a class="bigLink" href="#" onclick="enableExperimentalAccess();">Access data source</a>
 </div>
 <!-- End of warning -->
 

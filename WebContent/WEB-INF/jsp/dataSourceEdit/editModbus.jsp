@@ -28,6 +28,11 @@
   }
   
   function scan() {
+      if ($("dsStatusImg").src.includes("database_go.png")) {
+    	  alert("<fmt:message key="dsEdit.modbus.disableDataSourceFirst"/>");
+    	  return;
+      }
+      
       $set("scanMessage", "<fmt:message key="dsEdit.modbus.startScan"/>");
       dwr.util.removeAllOptions("scanNodes");
       scanButtons(true);
@@ -59,6 +64,7 @@
   
   function scanCancel() {
       DataSourceEditDwr.cancelTestingUtility(scanButtons);
+      $set("scanMessage", "<fmt:message key="dsEdit.modbus.scanCanceled"/>");
   }
   
   function scanButtons(scanning) {
@@ -67,7 +73,12 @@
   }
   
   function locatorTest() {
-      setDisabled("locatorTestBtn", true);
+      if ($("dsStatusImg").src.includes("database_go.png")) {
+    	  alert("<fmt:message key="dsEdit.modbus.disableDataSourceFirst"/>");
+    	  return;
+      }
+      
+	  setDisabled("locatorTestBtn", true);
       
       var locator = {};
       locator.slaveId = $get("test_slaveId");
@@ -99,6 +110,11 @@
   }
   
   function dataTest() {
+      if ($("dsStatusImg").src.includes("database_go.png")) {
+    	  alert("<fmt:message key="dsEdit.modbus.disableDataSourceFirst"/>");
+    	  return;
+      }
+	  
       setDisabled("dataTestBtn", true);
       dataTestImpl($get("dataTest_slaveId"), $get("dataTest_range"), $get("dataTest_offset"), $get("dataTest_length"));
       hideGenericMessages("dataTestGeneric");

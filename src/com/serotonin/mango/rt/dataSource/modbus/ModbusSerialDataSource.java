@@ -18,8 +18,6 @@
  */
 package com.serotonin.mango.rt.dataSource.modbus;
 
-import java.util.Enumeration;
-
 import com.serotonin.io.serial.SerialParameters;
 import com.serotonin.mango.rt.dataSource.DataSourceRT;
 import com.serotonin.mango.vo.dataSource.modbus.ModbusSerialDataSourceVO;
@@ -29,16 +27,11 @@ import com.serotonin.modbus4j.ModbusMaster;
 import com.serotonin.modbus4j.exception.ModbusInitException;
 import com.serotonin.web.i18n.LocalizableMessage;
 
-import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
-import gnu.io.SerialPort;
 
 public class ModbusSerialDataSource extends ModbusDataSource {
 	private final ModbusSerialDataSourceVO configuration;
 	ModbusMaster modbusMaster;
-	private Enumeration<?> portList;
-	private boolean connProblem = false;
-	private boolean firstTime = true;
 
 	private int timeoutPort = 10000;
 
@@ -80,65 +73,10 @@ public class ModbusSerialDataSource extends ModbusDataSource {
 
 	@Override
 	protected void doPoll(long time) {
-
-		portList = CommPortIdentifier.getPortIdentifiers();
-
-		// System.out.println("Configuration List Port " + portList);
-		// System.out.println("");
-
-		if (!verifyPort(configuration.getCommPortId())) {
-			if (firstTime) {
-				System.out.println("First Time !");
-				modbusMaster.destroy();
-				firstTime = false;
-			}
-			connProblem = true;
-			return;
-		}
-		if (connProblem) {
-			connProblem = false;
-			firstTime = true;
+		if (modbusMaster == null)
 			initialize();
-		}
+
 		super.doPoll(time);
-	}
-
-	public SerialPort getPort(String port, int timeout) {
-
-		SerialPort serialPort = null;
-
-		while (portList.hasMoreElements()) {
-			CommPortIdentifier portId = (CommPortIdentifier) portList.nextElement();
-			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-				if (portId.getName().equals(port)) {
-					try {
-						serialPort = (SerialPort) portId.open(configuration.getCommPortId(), timeout);
-					} catch (Exception e) {
-						e.printStackTrace();
-						// System.out.println("Error opening port!");
-					}
-				}
-			}
-		}
-		return serialPort;
-	}
-
-	public boolean verifyPort(String port) {
-
-		boolean p = false;
-
-		while (portList.hasMoreElements()) {
-			CommPortIdentifier portId = (CommPortIdentifier) portList.nextElement();
-			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-				if (portId.getName().equals(port)) {
-					p = true;
-					getPort(port, timeoutPort);
-					break;
-				} else
-					p = false;
-			}
-		}
-		return p;
 	}
 
 	@Override
