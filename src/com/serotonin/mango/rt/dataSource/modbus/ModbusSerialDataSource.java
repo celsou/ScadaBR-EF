@@ -27,16 +27,11 @@ import com.serotonin.modbus4j.ModbusMaster;
 import com.serotonin.modbus4j.exception.ModbusInitException;
 import com.serotonin.web.i18n.LocalizableMessage;
 
-import gnu.io.CommPort;
-import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
-import gnu.io.PortInUseException;
 
 public class ModbusSerialDataSource extends ModbusDataSource {
 	private final ModbusSerialDataSourceVO configuration;
 	ModbusMaster modbusMaster;
-	private boolean connProblem = false;
-	private boolean firstTime = true;
 
 	private int timeoutPort = 10000;
 
@@ -78,51 +73,10 @@ public class ModbusSerialDataSource extends ModbusDataSource {
 
 	@Override
 	protected void doPoll(long time) {
-		if (!verifyPort(configuration.getCommPortId()) && firstTime) {
-			// Problem in serial port
-			System.out.println("First Time!");
-			modbusMaster.destroy();
-			firstTime = false;
-			connProblem = true;
-			return;
-		}
-
-		if (connProblem) {
-			// Reload modbusMaster to attempt to fix problems
-			connProblem = false;
+		if (modbusMaster == null)
 			initialize();
-		}
 
 		super.doPoll(time);
-		firstTime = true;
-	}
-
-	public boolean verifyPort(String port) {
-		boolean p = false;
-
-		try {
-			CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(port);
-
-			if (portIdentifier.isCurrentlyOwned()) {
-				// Port exists and is in use
-				p = true;
-			} else {
-				// Test if port exists
-				CommPort commPort = portIdentifier.open(port, timeoutPort);
-				if (commPort != null)
-					commPort.close();
-				p = true;
-			}
-		} catch (PortInUseException e) {
-			// Port exists and is in use
-			p = true;
-		} catch (NoSuchPortException e) {
-			// Port does not exist
-		} catch (Exception e) {
-			// Unknown error
-		}
-
-		return p;
 	}
 
 	@Override

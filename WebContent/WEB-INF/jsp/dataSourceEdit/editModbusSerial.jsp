@@ -37,7 +37,7 @@
 	
 	function enableExperimentalAccess() {
 		// Disable warnings
-		if (document.getElementById("disableWarning").checked)
+		if (document.getElementById("disableWarning") && document.getElementById("disableWarning").checked)
 			setCookie("modbusWarning", "disabled");
 
 		document.getElementById("warningContainer").remove();
